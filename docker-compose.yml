@@ -15,7 +15,7 @@ services:
   auth-service:
     build:
       context: ./backend
-      dockerfile: ./auth_service/Dockerfile
+      dockerfile: auth_service/Dockerfile
     environment:
       - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
     ports:
