@@ -1,5 +1,5 @@
-# To build: docker compose --env-file .env build
-# To run: docker compose --env-file .env up
+# To build: docker compose build
+# To run: docker compose up
 version: '3.8'
 
 services:
