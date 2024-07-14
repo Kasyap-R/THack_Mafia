@@ -39,7 +39,7 @@ We are using poetry for venv/dependency management with our python microservices
 
 ### Running programs with poetry
 - To run a python file just use `poetry run python script.py`
-- For cli tools like fastapi, you can just do `poetry run fastapi` followed by the regular arguments you would use with fastapi
+- For cli tools like fastapi, you can use `poetry run fastapi` followed by the regular arguments you would use with fastapi
 
 ### Understanding Poetry and VS Code Integration
 

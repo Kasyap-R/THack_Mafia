@@ -12,7 +12,11 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String(50), unique=True, index=True)
     password = Column(String(100), unique=False, index=True)
-    created_at = Column(DateTime, default=datetime.now(datetime.UTC))
+
+
+class Avatar(Base):
+    __tablename__ = "Avatar"
+    id = Column(Integer, primary_key=True, index=True)
 
 
 # Add other models as needed

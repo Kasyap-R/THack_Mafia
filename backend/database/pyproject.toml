@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "shared"
+name = "database"
 version = "0.1.0"
 description = ""
 authors = ["Kasyap-R <kasyap.rachuri2@gmail.com>"]
@@ -7,7 +7,8 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
-sqlalchemy = "^2.0.31"
+sqlalchemy = "^1.4.0"
+mysql-connector-python = "^9.0.0"
 
 
 [build-system]
