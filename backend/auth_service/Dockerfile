@@ -4,7 +4,9 @@ WORKDIR /app
 
 RUN pip install poetry
 
-COPY . .
+COPY auth_service/pyproject.toml auth_service/poetry.lock ./
+COPY auth_service/ .
+COPY database/ ../database/
 
 RUN poetry install
 

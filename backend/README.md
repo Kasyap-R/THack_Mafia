@@ -23,11 +23,10 @@ By using Poetry, we can streamline our development process, enhance collaboratio
 
 ### Installing up Poetry
 We are using poetry for venv/dependency management with our python microservices
-1. install [pipx](https://pipx.pypa.io/stable/installation/)
-2. install poetry
+1. Using pip
     
     ```python
-    pipx install poetry
+    pip install poetry
     ```
 
 - To create a new poetry project: `poetry new project_name`

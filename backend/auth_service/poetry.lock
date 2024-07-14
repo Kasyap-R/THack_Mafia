@@ -68,6 +68,23 @@ files = [
 ]
 
 [[package]]
+name = "database"
+version = "0.1.0"
+description = ""
+optional = false
+python-versions = "^3.12"
+files = []
+develop = false
+
+[package.dependencies]
+mysql-connector-python = "^9.0.0"
+sqlalchemy = "^1.4.0"
+
+[package.source]
+type = "directory"
+url = "../database"
+
+[[package]]
 name = "dnspython"
 version = "2.6.1"
 description = "DNS toolkit"
@@ -1270,4 +1287,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "7ff1ac117053d33e68e63cad274ea10f65d9aa8276388f557b7904a520765014"
+content-hash = "528dee7394b4efec006914fbd79b7b2f389cb5305732ee290497d9d6b91cc2b5"

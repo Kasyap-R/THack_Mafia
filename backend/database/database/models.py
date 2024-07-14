@@ -1,6 +1,5 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from datetime import datetime
 
 # Base is a container for our schema. SQLAlchemy registers
 # each class that inherits from Base represents a new table in our schema
