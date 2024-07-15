@@ -29,23 +29,26 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Stop existing Docker containers
-        run: docker-compose down
-        
-      - name: Build and start Docker containers
-        env:
-          MYSQL_ROOT_PASSWORD: "test"
-          MYSQL_DATABASE: "test"
+      - name: pull latest changes
         run: |
-          docker-compose build
-          docker-compose up -d
-        
-      - name: Clean up old Docker images
-        run: docker image prune -af 
+          cd Documents/THack_Mafia
+          git pull origin main
+  
+      - name: stop old docker compose
+        run: |
+          cd Documents/THack_Mafia
+          docker compose down
 
+      - name: build new docker compose
+        run: |
+          cd Documents/THack_Mafia
+          docker compose build
+
+      - name: start new docker compose
+        run: |
+          cd Documents/THack_Mafia
+          docker compose upr necessary environment variables here
+        
 
       
 
