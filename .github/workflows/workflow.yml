@@ -7,13 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  integration:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run docker-compose
+      - name: setup docker-compose
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           compose-file: "docker-compose.yml"
@@ -21,9 +21,26 @@ jobs:
           MYSQL_ROOT_PASSWORD: "test"
           MYSQL_DATABASE: "test"
 
-      - name: Execute tests in the running services
+      - name: docker compose build microservices and frontend 
         run: |
           docker-compose build
+          
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: stop old docker compose
+        run: docker compose down
+
+      - name: build new docker compose
+        run: docker compose build
+
+      - name: start new docker compose
+        run: docker compose up
+
+
       
 
       
