@@ -29,21 +29,22 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Navigate to project directory
-        run: |
-          cd ~/Documents/THack_Mafia
-
-      - name: Pull latest changes
-        run: |
-          git pull origin main
-
-      - name: Shut down existing Docker containers
-        run: |
-          docker-compose down
-
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Stop existing Docker containers
+        run: docker-compose down
+        
       - name: Build and start Docker containers
+        env:
+          MYSQL_ROOT_PASSWORD: "test"
+          MYSQL_DATABASE: "test"
         run: |
+          docker-compose build
           docker-compose up -d
+        
+      - name: Clean up old Docker images
+        run: docker image prune -af 
 
 
       
