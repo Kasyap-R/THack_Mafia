@@ -7,13 +7,13 @@ on:
     branches: [ "main" ]
 
 jobs:
-  continuous-integration:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Run docker-compose
+      - name: Run docker-compose
         uses: hoverkraft-tech/compose-action@v2.0.1
         with:
           compose-file: ".docker-compose.yml"
@@ -21,10 +21,6 @@ jobs:
       - name: Execute tests in the running services
         run: |
           docker-compose build
-
-      - name: Execute tests in the running services
-      - run: |
-          docker-compose up -d
       
 
       
