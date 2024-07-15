@@ -13,9 +13,4 @@ class User(Base):
     password = Column(String(100), unique=False, index=True)
 
 
-class Avatar(Base):
-    __tablename__ = "Avatar"
-    id = Column(Integer, primary_key=True, index=True)
-
-
-# Add other models as needed
+# Add other tables as needed

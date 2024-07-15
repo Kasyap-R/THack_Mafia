@@ -13,7 +13,9 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application code
 COPY . .
 
-# Build the React application
+# Build the React app
+ARG REACT_APP_HOST_URL
+ENV REACT_APP_HOST_URL=$REACT_APP_HOST_URL
 RUN npm run build
 
 # Stage 2: Serve the application with Nginx

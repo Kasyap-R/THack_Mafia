@@ -2,6 +2,7 @@ import {create} from 'zustand';
 
 export enum Page {
     HOME,
+    LOGIN,
 }
 
 interface PageState {
@@ -9,9 +10,7 @@ interface PageState {
     setPage: (page: Page) => void;
 }
 
-const usePageStore = create<PageState>((set) => ({
-    currentPage: Page.HOME,
+export const usePageStore = create<PageState>((set) => ({
+    currentPage: Page.LOGIN,
     setPage: (page: Page) => set({currentPage: page}),
 }));
-
-export default usePageStore;
