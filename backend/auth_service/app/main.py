@@ -13,9 +13,9 @@ HOST_URL = os.getenv("HOST_URL")
 
 router = APIRouter()
 
-# Allow front-end to make requests
+
 origins = [
-    f"{HOST_URL}:3000",
+    f"{HOST_URL}:3000",  # Allow front-end to make requests
     "*",  # Used for local testing (i.e. Postman or curl)
 ]
 
@@ -29,7 +29,7 @@ app.add_middleware(
 
 
 @router.get("/login/{username}/{password}", response_model=UserExists)
-async def login(username: str, password: str, db: Session = Depends(get_db)):
+def login(username: str, password: str, db: Session = Depends(get_db)):
     if does_user_exist(UserCredentials(username=username, password=password), db):
         return UserExists(user_exists=True)
     else:
@@ -39,7 +39,7 @@ async def login(username: str, password: str, db: Session = Depends(get_db)):
 @router.post(
     "/create_user", status_code=status.HTTP_201_CREATED, response_model=UserExists
 )
-async def create_user(creds: UserCredentials, db: Session = Depends(get_db)):
+def create_user(creds: UserCredentials, db: Session = Depends(get_db)):
     if does_user_exist(creds, db):
         return UserExists(user_exists=True)
     new_user = User(username=creds.username, password=creds.password)
