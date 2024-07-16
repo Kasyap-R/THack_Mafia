@@ -15,6 +15,7 @@ database = {path = "../database"}
 pydantic = "^2.8.2"
 uuid = "^1.30"
 speechrecognition = "^3.10.4"
+aiofiles = "^24.1.0"
 
 
 [build-system]

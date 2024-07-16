@@ -39,7 +39,6 @@ services:
     depends_on:
       - database
 
-<<<<<<< HEAD
   meeting-service:
     build:
       context: ./backend
@@ -48,12 +47,10 @@ services:
       - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
       - HOST_URL=${HOST_URL}
     ports:
-      - "7000:7000"
+      - "6500:8000"
     depends_on:
       - database
 
-=======
->>>>>>> dbf87a8 (Switched Dockerfile on frontend to use yarn)
   database:
     build:
       context: ./backend/database
