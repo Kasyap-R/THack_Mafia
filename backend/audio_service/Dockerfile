@@ -1,11 +1,10 @@
-FROM python:3.12-slim
+FROM node:18.16.0-alpine3.17
 
 WORKDIR /app
 
-RUN pip install poetry
+COPY . .
 
-COPY audio_service/ .
+RUN npm install
 
-RUN poetry install
+CMD ["npm", "start"]
 
-CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

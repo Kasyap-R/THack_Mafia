@@ -1,6 +1,6 @@
 const HOST_URL = process.env.REACT_APP_HOST_URL;
-const AUTH_URL = `http://${HOST_URL}:8000/auth`;
-const AUDIO_URL = `${HOST_URL}:7500/audio`;
+const AUTH_URL = `${HOST_URL}:8000/auth`;
+const AUDIO_URL = `${HOST_URL}:7500`;
 
 export const API_ENDPOINTS = {
   AUTH: {
@@ -8,7 +8,7 @@ export const API_ENDPOINTS = {
     REGISTER: `${AUTH_URL}/create_user`
   },
   AUDIO: {
-    WEBSOCKET: `ws://${AUDIO_URL}/ws`
+    SOCKET: `${AUDIO_URL}/`
   }
   // add more services and their endpoints as needed
 };

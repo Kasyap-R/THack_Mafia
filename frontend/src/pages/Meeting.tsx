@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../stores/UserStore";
-import Audio from "../components/AudioComponent";
+import AudioComponent from "../components/AudioComponent";
 
 interface User {
   user_id: string;
@@ -21,7 +21,7 @@ const Meeting = () => {
     <div>
       <h1>Meeting Room</h1>
       <p>Welcome, {username}!</p>
-      <Audio userId={user_id} />
+      <AudioComponent userId={user_id} />
       <h2>Participants:</h2>
       <ul>
         {participants.map((participant) => (

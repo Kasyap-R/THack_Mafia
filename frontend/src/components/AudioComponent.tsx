@@ -4,103 +4,149 @@ import {
   faMicrophone,
   faMicrophoneSlash,
 } from "@fortawesome/free-solid-svg-icons";
-import Peer, { MediaConnection } from "peerjs";
 import { API_ENDPOINTS } from "../config/api";
+import { io, Socket } from "socket.io-client";
 
 interface AudioProps {
   userId: number;
 }
 
-const Audio = ({ userId }: AudioProps) => {
+const AudioComponent: React.FC<AudioProps> = ({ userId }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
-  const [connectionStatus, setConnectionStatus] = useState("Initializing...");
-  const peerRef = useRef<Peer | null>(null);
+  const socketRef = useRef<Socket | null>(null);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const [peers, setPeers] = useState<{
-    [key: string]: { call: MediaConnection; stream: MediaStream };
-  }>({});
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    setConnectionStatus("Creating peer...");
-    const peer = new Peer(userId.toString(), {
-      host: "localhost",
-      port: 7500,
-      path: "/audio",
-      debug: 3, // Enable debug logging
+    socketRef.current = io(API_ENDPOINTS.AUDIO.SOCKET, {
+      transports: ["websocket"],
+      upgrade: false,
     });
 
-    peer.on("open", (id) => {
-      console.log("My peer ID is: " + id);
+    socketRef.current.on("connect", () => {
+      console.log("Socket connected");
       setIsConnected(true);
-      setConnectionStatus("Connected to server");
+      initializeAudioStream();
     });
 
-    peer.on("connection", (conn) => {
-      console.log("New peer connection:", conn.peer);
+    socketRef.current.on("disconnect", () => {
+      console.log("Socket disconnected");
+      setIsConnected(false);
     });
 
-    peer.on("call", (call) => {
-      console.log("Receiving call from:", call.peer);
-      navigator.mediaDevices
-        .getUserMedia({ audio: true, video: false })
-        .then((stream) => {
-          streamRef.current = stream;
-          call.answer(stream);
-          call.on("stream", (remoteStream) => {
-            console.log("Received stream from:", call.peer);
-            setPeers((prevPeers) => ({
-              ...prevPeers,
-              [call.peer]: { call, stream: remoteStream },
-            }));
-          });
-        })
-        .catch((err) => console.error("Failed to get local stream", err));
+    socketRef.current.on("connect_error", (error) => {
+      console.error("Connection error:", error);
     });
 
-    peer.on("error", (error) => {
-      console.error("PeerJS error:", error);
-      setConnectionStatus(`Error: ${error.type}`);
-    });
-
-    peerRef.current = peer;
+    socketRef.current.on("audioStream", handleIncomingAudio);
 
     return () => {
-      peer.destroy();
+      if (socketRef.current) {
+        socketRef.current.disconnect();
+      }
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach((track) => track.stop());
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
     };
-  }, [userId]);
+  }, []);
 
-  const startStreaming = () => {
-    setConnectionStatus("Starting stream...");
+  useEffect(() => {
+    if (!isMuted && mediaRecorderRef.current) {
+      startRecording();
+    } else {
+      stopRecording();
+    }
+  }, [isMuted]);
+
+  const initializeAudioStream = () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true, video: false })
       .then((stream) => {
+        console.log("Audio stream initialized");
         streamRef.current = stream;
-        setConnectionStatus("Stream started");
-        // Here you would typically call other peers
-        // For example: peerRef.current?.call(otherPeerId, stream);
+        mediaRecorderRef.current = new MediaRecorder(stream);
+        mediaRecorderRef.current.addEventListener(
+          "dataavailable",
+          handleDataAvailable
+        );
       })
-      .catch((err) => {
-        console.error("Failed to get local stream", err);
-        setConnectionStatus(`Stream error: ${err.message}`);
+      .catch((error) => {
+        console.error("Error capturing audio.", error);
       });
   };
 
-  const stopStreaming = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track) => track.stop());
-      streamRef.current = null;
-      setConnectionStatus("Stream stopped");
+  const handleDataAvailable = (event: BlobEvent) => {
+    if (
+      event.data.size > 0 &&
+      socketRef.current &&
+      socketRef.current.connected
+    ) {
+      const fileReader = new FileReader();
+      fileReader.onloadend = () => {
+        const base64String = fileReader.result as string;
+        console.log("Sending audio data");
+        socketRef.current!.emit("audioStream", base64String);
+      };
+      fileReader.readAsDataURL(event.data);
     }
   };
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-    if (isMuted) {
-      startStreaming();
-    } else {
-      stopStreaming();
+  const startRecording = () => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "inactive"
+    ) {
+      console.log("Starting continuous recording");
+
+      const recordAndSend = () => {
+        if (
+          mediaRecorderRef.current &&
+          mediaRecorderRef.current.state === "inactive"
+        ) {
+          mediaRecorderRef.current.start();
+          setTimeout(() => {
+            if (
+              mediaRecorderRef.current &&
+              mediaRecorderRef.current.state === "recording"
+            ) {
+              mediaRecorderRef.current.stop();
+            }
+          }, 500);
+        }
+      };
+
+      recordAndSend();
+      intervalRef.current = setInterval(recordAndSend, 500);
     }
+  };
+
+  const stopRecording = () => {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state === "recording"
+    ) {
+      console.log("Stopping recording");
+      mediaRecorderRef.current.stop();
+    }
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+  };
+
+  const handleIncomingAudio = (audioData: string) => {
+    console.log("Received audio data");
+    if (document.hidden) return;
+    const audio = new Audio(audioData);
+    audio.play().catch((error) => console.error("Error playing audio:", error));
+  };
+
+  const toggleMute = () => {
+    setIsMuted((prev) => !prev);
   };
 
   return (
@@ -114,19 +160,10 @@ const Audio = ({ userId }: AudioProps) => {
           size="2x"
         />
       </div>
-      <p>Status: {connectionStatus}</p>
-      <p>Connected Peers: {Object.keys(peers).join(", ") || "None"}</p>
-      {Object.entries(peers).map(([peerId, { stream }]) => (
-        <audio
-          key={peerId}
-          autoPlay
-          ref={(el) => {
-            if (el) el.srcObject = stream;
-          }}
-        />
-      ))}
+      <div>Connection status: {isConnected ? "Connected" : "Disconnected"}</div>
+      <div>Mute status: {isMuted ? "Muted" : "Unmuted"}</div>
     </div>
   );
 };
 
-export default Audio;
+export default AudioComponent;

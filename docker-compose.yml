@@ -30,10 +30,9 @@ services:
 
   audio-service:
     build:
-      context: ./backend
-      dockerfile: audio_service/Dockerfile
+      context: ./backend/audio_service
+      dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
       - HOST_URL=${HOST_URL}
     ports:
       - "7500:8000"
