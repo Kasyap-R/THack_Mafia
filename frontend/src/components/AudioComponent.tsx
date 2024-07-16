@@ -116,12 +116,12 @@ const AudioComponent: React.FC<AudioProps> = ({ userId }) => {
             ) {
               mediaRecorderRef.current.stop();
             }
-          }, 500);
+          }, 1000);
         }
       };
 
       recordAndSend();
-      intervalRef.current = setInterval(recordAndSend, 500);
+      intervalRef.current = setInterval(recordAndSend, 1000);
     }
   };
 
