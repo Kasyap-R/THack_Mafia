@@ -172,10 +172,7 @@ async def dummy_llm_response(query: str) -> LLMResponse:
 
 async def process_message(data: dict, meeting_id: str, username: str):
     if data["type"] == "text_query":
-        if mate_in_query():
-            llm_response = await dummy_llm_response(data["query"])
-        else:
-            llm_response = None
+        llm_response = await dummy_llm_response(data["query"])
         updated_content = SharedContent(
             llm_answer=llm_response.llm_answer if llm_response else None,
             username=username,
