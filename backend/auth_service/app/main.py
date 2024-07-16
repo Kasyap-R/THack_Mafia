@@ -30,23 +30,27 @@ app.add_middleware(
 
 @router.get("/login/{username}/{password}", response_model=UserExists)
 def login(username: str, password: str, db: Session = Depends(get_db)):
-    if does_user_exist(UserCredentials(username=username, password=password), db):
-        return UserExists(user_exists=True)
+    user = does_user_exist(UserCredentials(username=username, password=password), db)
+    if user:
+        return UserExists(did_user_exist=True, user_id=user.id, username=user.username)
     else:
-        return UserExists(user_exists=False)
+        return UserExists(did_user_exist=False, user_id=None, username=None)
 
 
 @router.post(
     "/create_user", status_code=status.HTTP_201_CREATED, response_model=UserExists
 )
 def create_user(creds: UserCredentials, db: Session = Depends(get_db)):
-    if does_user_exist(creds, db):
-        return UserExists(user_exists=True)
+    user = does_user_exist(creds, db)
+    if user:
+        return UserExists(did_user_exist=True, user_id=user.id, username=user.username)
     new_user = User(username=creds.username, password=creds.password)
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return UserExists(user_exists=False)
+    return UserExists(
+        did_user_exist=False, user_id=new_user.id, username=new_user.username
+    )
 
 
 # Include the router with the prefix

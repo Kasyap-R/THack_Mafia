@@ -8,4 +8,6 @@ class UserCredentials(BaseModel):
 
 
 class UserExists(BaseModel):
-    user_exists: bool
+    did_user_exist: bool
+    user_id: int | None
+    username: str | None

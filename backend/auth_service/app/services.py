@@ -4,8 +4,9 @@ from .models import UserCredentials
 from database.models import User
 
 
-def does_user_exist(creds: UserCredentials, db: Session) -> bool:
+def does_user_exist(creds: UserCredentials, db: Session) -> int | None:
     user = db.query(User).filter(User.username == creds.username).first()
     if user:
-        return True
-    return False
+        print("Found User")
+        return user
+    return None
