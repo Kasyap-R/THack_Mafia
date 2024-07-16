@@ -39,6 +39,7 @@ services:
     depends_on:
       - database
 
+<<<<<<< HEAD
   meeting-service:
     build:
       context: ./backend
@@ -51,6 +52,8 @@ services:
     depends_on:
       - database
 
+=======
+>>>>>>> dbf87a8 (Switched Dockerfile on frontend to use yarn)
   database:
     build:
       context: ./backend/database

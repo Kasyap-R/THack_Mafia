@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "database"
+version = "0.1.0"
+description = ""
+authors = ["Kasyap-R <kasyap.rachuri2@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = "^1.4.0"
+mysql-connector-python = "^9.0.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
