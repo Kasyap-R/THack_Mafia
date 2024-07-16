@@ -15,7 +15,7 @@ class MeetingJoin(BaseModel):
     meeting_id: str
     creator_id: str
 
-class MeetingJoin(BaseModel):
+class MeetingLeave(BaseModel):
     meeting_id: str
     creator_id: str
 
