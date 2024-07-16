@@ -1,14 +1,14 @@
 # Stage 1: Build the React application
-FROM node:16-alpine as build
+FROM node:16-alpine AS build
 
 # Set the working directory inside the container
 WORKDIR /app
 
 # Copy package.json and package-lock.json (if available)
-COPY package*.json ./
+COPY package*.json yarn.lock ./
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN yarn install
 
 # Copy the rest of the application code
 COPY . .
