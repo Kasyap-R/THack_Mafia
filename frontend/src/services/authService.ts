@@ -15,6 +15,7 @@ export interface AuthUserResponse {
 
 export const auth= {
     login: async (credentials: UserCredentials): Promise<AuthUserResponse> => {
+        console.log(API_ENDPOINTS.AUTH.LOGIN);
         const url = `${API_ENDPOINTS.AUTH.LOGIN}/${credentials.username}/${credentials.password}`;
         const response = await fetch(url, {
             method: 'GET',

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../stores/UserStore";
 import AudioComponent from "../components/AudioComponent";
+import ChatBoxComponent from "../components/ChatBoxComponent";
 
 interface User {
   user_id: string;
@@ -28,6 +29,7 @@ const Meeting = () => {
           <li key={participant}>{participant}</li>
         ))}
       </ul>
+      <ChatBoxComponent />
     </div>
   );
 };

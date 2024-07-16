@@ -1,4 +1,4 @@
-const HOST_URL = process.env.REACT_APP_HOST_URL;
+const HOST_URL = `http://${process.env.REACT_APP_HOST_URL}`;
 const AUTH_URL = `${HOST_URL}:8000/auth`;
 const AUDIO_URL = `${HOST_URL}:7500`;
 

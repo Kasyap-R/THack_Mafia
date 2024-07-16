@@ -45,6 +45,10 @@ const Login = () => {
 
     setPage(Page.MEETING);
   }
+
+  function areCredentialsWhitespace() {
+    return password.trim().length === 0 || username.trim().length === 0;
+  }
   return (
     <div style={{ padding: "20px" }}>
       <h2>Create your account</h2>
