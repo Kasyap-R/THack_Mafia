@@ -15,7 +15,7 @@ router = APIRouter()
 
 
 origins = [
-    f"{HOST_URL}:3000",  # Allow front-end to make requests
+    f"http://{HOST_URL}:3000",  # Allow front-end to make requests
     "*",  # Used for local testing (i.e. Postman or curl)
 ]
 
