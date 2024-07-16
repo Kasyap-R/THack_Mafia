@@ -8,7 +8,9 @@ export interface UserCredentials {
 }
 
 export interface AuthUserResponse {
-    user_exists: boolean,
+    did_user_exist: boolean,
+    user_id: number | null,
+    username: string | null,
 }
 
 export const auth= {

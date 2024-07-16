@@ -1,11 +1,11 @@
 import React from "react";
 import { usePageStore, Page } from "./stores/PageStore";
-import Home from "./pages/Home";
 import Login from "./pages/Login";
+import Meeting from "./pages/Meeting";
 
 const pageComponents = {
-  [Page.HOME]: Home,
   [Page.LOGIN]: Login,
+  [Page.MEETING]: Meeting,
 };
 
 function App() {

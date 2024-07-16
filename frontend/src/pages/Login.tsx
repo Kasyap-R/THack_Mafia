@@ -1,18 +1,26 @@
 import React, { useState } from "react";
 import { Page, usePageStore } from "../stores/PageStore";
 import { auth, UserCredentials } from "../services/authService";
+import { useUserStore } from "../stores/UserStore";
 
 const Login = () => {
   const { setPage } = usePageStore();
+  const { setRealUsername, setUserId } = useUserStore();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   async function handleLogin() {
-    console.log("HELLO");
     const data: UserCredentials = { username, password };
     let response = await auth.login(data);
-    if (response.user_exists) {
-      setPage(Page.HOME);
+    if (response.did_user_exist === false) {
+      if (response.username && response.user_id) {
+        setRealUsername(response.username);
+        setUserId(response.user_id);
+      } else {
+        alert("Found user in database but could not find credentials");
+        return;
+      }
+      setPage(Page.MEETING);
       return;
     }
     alert("User doesn't exist. Register instead.");
@@ -21,10 +29,21 @@ const Login = () => {
   async function handleRegister() {
     const data: UserCredentials = { username, password };
     let response = await auth.register(data);
-    if (response.user_exists) {
+    if (response.did_user_exist === true) {
       alert("User already exists. Login instead.");
+      return;
     }
-    setPage(Page.HOME);
+    if (response.user_id && response.username) {
+      setRealUsername(response.username);
+      setUserId(response.user_id);
+    } else {
+      alert(
+        "Added user in database but did not recieve registered credentials"
+      );
+      return;
+    }
+
+    setPage(Page.MEETING);
   }
   return (
     <div style={{ padding: "20px" }}>
