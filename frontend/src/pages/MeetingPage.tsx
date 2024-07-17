@@ -7,6 +7,7 @@ import { Chat, useMeetingStore } from "../stores/MeetingStore";
 import { API_ENDPOINTS } from "../config/api";
 import { Meeting, meetingApi } from "../services/meetingService";
 import MultiScreenChartDisplay from "../components/MultiScreenChartDisplay";
+import ExportButtonComponent from "../components/ExportButtonComponent";
 
 const MeetingContainer = styled.div`
   display: flex;
@@ -14,6 +15,7 @@ const MeetingContainer = styled.div`
   height: 100vh;
   background-color: #dce2ee;
   font-family: "RingsideNarrow", sans-serif;
+  overflow: hidden;
 `;
 
 const TopBar = styled.div`
@@ -23,6 +25,7 @@ const TopBar = styled.div`
   padding: 10px;
   background-color: white;
   border-bottom: 1px solid white;
+  height: 60px;
 `;
 
 const SmallLogo = styled.img`
@@ -35,16 +38,16 @@ const AddButton = styled.button`
   color: #dce2ee;
   border: none;
   border-radius: 50%;
-  width: 100px;
-  height: 100px;
-  font-size: 75px;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
   cursor: pointer;
   margin-right: 10px;
 `;
 
 const ContentWrapper = styled.div`
   display: flex;
-  height: calc(100vh - 70px); // Adjust based on your TopBar height
+  height: calc(100vh - 120px); // Subtracting TopBar and BottomBar heights
 `;
 
 const Whiteboard = styled.div`
@@ -53,12 +56,12 @@ const Whiteboard = styled.div`
   border: 1px solid white;
   display: flex;
   flex-direction: column;
-  padding: 20px;
-  overflow-y: auto;
+  padding: 10px;
+  overflow: hidden;
 `;
 
 const ChatBoxWrapper = styled.div`
-  width: 300px; // Adjust width as needed
+  width: 300px;
   height: 100%;
   border-left: 1px solid #ccc;
 `;
@@ -68,41 +71,41 @@ const BottomBar = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #82a4eb;
-  padding: 15px 20px;
-  width: 100%;
+  padding: 10px 20px;
+  height: 60px;
 `;
 
 const CircularIcons = styled.div`
   display: flex;
-  gap: 30px;
+  gap: 10px;
 `;
 
 const CircularIcon = styled.div`
   background-color: white;
-  border: 5px solid #08238c;
+  border: 3px solid #08238c;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
 `;
 
 const CentralizedChatInput = styled.div`
   display: flex;
   align-items: center;
   width: 50%;
-  max-width: 700px;
+  max-width: 500px;
 `;
 
 const ChatInput = styled.input`
   flex-grow: 1;
-  padding: 10px;
+  padding: 8px;
   border-radius: 20px;
-  border: 3px solid #08238c;
-  font-size: 16px;
+  border: 2px solid #08238c;
+  font-size: 14px;
 `;
 
 const VoiceButton = styled.button<{ isListening: boolean }>`
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   background-color: ${(props) => (props.isListening ? "#ff4444" : "white")};
   border: 2px solid black;
   border-radius: 50%;
@@ -111,6 +114,7 @@ const VoiceButton = styled.button<{ isListening: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 12px;
 `;
 
 const MeetingPage = () => {
@@ -227,7 +231,7 @@ const MeetingPage = () => {
     <MeetingContainer>
       <TopBar>
         <SmallLogo alt="Logo" />
-        <AddButton>{/* Add button content here if needed */}</AddButton>
+        <AddButton>{<ExportButtonComponent />}</AddButton>
       </TopBar>
       <ContentWrapper>
         <Whiteboard>

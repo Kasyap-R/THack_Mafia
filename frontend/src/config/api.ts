@@ -21,7 +21,8 @@ export const API_ENDPOINTS = {
     MEETING_LIST:`${MEETING_URL}/`,
   },
   AI: {
-    UPLOAD: `${AI_URL}/upload`
+    UPLOAD: `${AI_URL}/upload`,
+    SUMMARY: `${AI_URL}/summary`,
   }
   // add more services and their endpoints as needed
 };
