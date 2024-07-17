@@ -21,20 +21,20 @@ const MultiScreenChartDisplay = ({ screenStates }) => {
 
   return (
     <div style={styles.outerContainer}>
-      <button onClick={goToPreviousScreen} style={styles.arrowButton}>
-        <ChevronLeft size={24} color="white" />
-      </button>
-      <div style={styles.container}>
-        <div style={styles.content}>
-          <DynamicChartDisplay chartData={screenStates[currentScreenIndex]} />
-        </div>
+      <div style={styles.content}>
+        <DynamicChartDisplay chartData={screenStates[currentScreenIndex]} />
+      </div>
+      <div style={styles.navigationContainer}>
+        <button onClick={goToPreviousScreen} style={styles.arrowButton}>
+          <ChevronLeft size={24} color="white" />
+        </button>
         <div style={styles.pageIndicator}>
           {currentScreenIndex + 1} / {screenStates.length}
         </div>
+        <button onClick={goToNextScreen} style={styles.arrowButton}>
+          <ChevronRight size={24} color="white" />
+        </button>
       </div>
-      <button onClick={goToNextScreen} style={styles.arrowButton}>
-        <ChevronRight size={24} color="white" />
-      </button>
     </div>
   );
 };
@@ -48,23 +48,21 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
   },
-  container: {
-    width: "calc(100% - 120px)", // Subtract arrow width from both sides
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  },
   content: {
     width: "100%",
     height: "calc(100% - 40px)", // Subtract space for page indicator
     overflow: "auto",
     padding: "0px",
   },
-  arrowButton: {
+  navigationContainer: {
     position: "absolute",
-    top: "50%",
-    transform: "translateY(-50%)",
+    bottom: "10px",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  arrowButton: {
     fontSize: "24px",
     padding: "10px 15px",
     background: "rgba(0, 0, 0, 0.5)",
@@ -78,21 +76,17 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     transition: "background-color 0.3s ease",
+    margin: "0 10px",
   },
   pageIndicator: {
-    alignSelf: "center",
     background: "rgba(0, 0, 0, 0.5)",
     color: "white",
     padding: "5px 10px",
     borderRadius: "15px",
     fontSize: "14px",
-    marginBottom: "10px",
+    margin: "0 10px",
   },
 };
-
-// Add specific styles for left and right arrows
-styles.leftArrow = { ...styles.arrowButton, left: "10px" };
-styles.rightArrow = { ...styles.arrowButton, right: "10px" };
 
 const ChartTypes = {
   PIE_CHART: "pie_chart",

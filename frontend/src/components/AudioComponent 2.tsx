@@ -11,7 +11,7 @@ interface AudioProps {
   userId: number;
 }
 
-const AudioComponent = ({ userId }: AudioProps) => {
+const AudioComponent: React.FC<AudioProps> = ({ userId }) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef<Socket | null>(null);
@@ -153,17 +153,15 @@ const AudioComponent = ({ userId }: AudioProps) => {
     <div>
       <div
         onClick={toggleMute}
-        style={{
-          cursor: "pointer",
-          color: isMuted ? "red" : "green",
-          marginRight: 5,
-        }}
+        style={{ cursor: "pointer", color: isMuted ? "red" : "green" }}
       >
         <FontAwesomeIcon
           icon={isMuted ? faMicrophoneSlash : faMicrophone}
           size="2x"
         />
       </div>
+      <div>Connection status: {isConnected ? "Connected" : "Disconnected"}</div>
+      <div>Mute status: {isMuted ? "Muted" : "Unmuted"}</div>
     </div>
   );
 };
