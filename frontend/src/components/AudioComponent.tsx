@@ -11,7 +11,7 @@ interface AudioProps {
   userId: number;
 }
 
-const AudioComponent: React.FC<AudioProps> = ({ userId }) => {
+const AudioComponent = ({ userId }: AudioProps) => {
   const [isMuted, setIsMuted] = useState(true);
   const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef<Socket | null>(null);

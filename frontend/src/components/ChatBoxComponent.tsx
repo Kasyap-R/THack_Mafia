@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Chat, useMeetingStore } from "../stores/MeetingStore";
+import { Chat } from "../stores/MeetingStore"; // Adjust the import if necessary
 
-const ChatBoxComponent: React.FC = () => {
-  const chatHistory = useMeetingStore((state) => state.chatHistory);
-  const updateChatHistory = useMeetingStore((state) => state.updateChatHistory);
+interface ChatProps {
+  chatHistory: Chat[];
+  onNewChat: (chat: Chat) => void;
+}
+
+const ChatBoxComponent: React.FC<ChatProps> = ({ chatHistory, onNewChat }) => {
   const [inputText, setInputText] = useState<string>("");
   const [isListening, setIsListening] = useState<boolean>(false);
-
-  useEffect(() => {
-    // Add initial chat messages if chatHistory is empty
-    if (chatHistory.length === 0) {
-      const initialChats: Chat[] = [
-        { user: "Alice", message: "Hello everyone!" },
-        { user: "Bob", message: "Hi Alice!" },
-        { user: "Alice", message: "How are you, Bob?" },
-        { user: "Bob", message: "I am good, thanks!" },
-      ];
-      initialChats.forEach((chat) => updateChatHistory(chat));
-    }
-  }, [chatHistory.length, updateChatHistory]);
 
   useEffect(() => {
     const SpeechRecognition =
@@ -46,7 +36,7 @@ const ChatBoxComponent: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (inputText.trim()) {
-      updateChatHistory({ user: "User", message: inputText.trim() });
+      onNewChat({ user: "User", message: inputText.trim() });
       setInputText("");
     }
   };

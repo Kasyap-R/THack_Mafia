@@ -3,6 +3,7 @@ import {create} from 'zustand';
 export enum Page {
     LOGIN,
     MEETING,
+    HOME,
 }
 
 interface PageState {
