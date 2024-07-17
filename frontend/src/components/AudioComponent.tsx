@@ -1,15 +1,32 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faMicrophone,
-  faMicrophoneSlash,
-} from "@fortawesome/free-solid-svg-icons";
+import styled from "styled-components";
 import { API_ENDPOINTS } from "../config/api";
 import { io, Socket } from "socket.io-client";
 
 interface AudioProps {
   userId: number;
 }
+
+const MuteButton = styled.button<{ isMuted: boolean }>`
+  background-color: ${(props) => (props.isMuted ? "red" : "white")};
+  color: #08238c;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+`;
+
+const Icon = styled.img`
+  width: 40px;
+  height: 40px;
+`;
 
 const AudioComponent = ({ userId }: AudioProps) => {
   const [isMuted, setIsMuted] = useState(true);
@@ -150,19 +167,14 @@ const AudioComponent = ({ userId }: AudioProps) => {
   };
 
   return (
-    <div>
-      <div
-        onClick={toggleMute}
-        style={{ cursor: "pointer", color: isMuted ? "red" : "green" }}
-      >
-        <FontAwesomeIcon
-          icon={isMuted ? faMicrophoneSlash : faMicrophone}
-          size="2x"
-        />
-      </div>
-      <div>Connection status: {isConnected ? "Connected" : "Disconnected"}</div>
-      <div>Mute status: {isMuted ? "Muted" : "Unmuted"}</div>
-    </div>
+    <MuteButton onClick={toggleMute} isMuted={isMuted}>
+      <Icon
+        src={
+          isMuted ? "/images/microphone-slash.png" : "/images/microphone.png"
+        }
+        alt="Mute"
+      />
+    </MuteButton>
   );
 };
 
