@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "ai-service"
+version = "0.1.0"
+description = ""
+authors = ["ui3s2g1 <Rithvik.Kasarla@TIAA.org>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.111.1"
+database = {path = "../database"}
+langchain = "^0.2.8"
+langchain-community = "^0.2.7"
+openai = "^1.35.13"
+tiktoken = "^0.7.0"
+langchain-core = "^0.2.19"
+pypdf = "^4.3.0"
+langchain-openai = "^0.1.16"
+matplotlib = "^3.9.1"
+faiss-cpu = "^1.8.0.post1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

@@ -1,0 +1,231 @@
+{
+    "Alphabet Impact Report.pdf": {
+        "GreenBuildingArea": {
+            "area_sq_meters": 4643000,
+            "number_of_buildings": 84,
+            "financial_allocation": 15270000000,
+            "innovative_featuers": [
+                "Solar panels",
+                "Rainwater harvesting",
+                "Green roofs",
+                "Energy efficient lighting",
+                "Energy efficient design",
+                "On-site renewable energy",
+                "Water conservation measures",
+                "Sustainable building materials",
+                "On-site renewable energy generation",
+                "Water recycling systems",
+                "Smart building management systems",
+                "Sustainable construction materials"
+            ]
+        },
+        "LandsConserved": {
+            "area_hectares": 1005800,
+            "location": "Appalachian Mountains, California, Various locations globally",
+            "financial_allocation": 1041000000
+        },
+        "WasteDivertedFromLandfill": {
+            "waste_tonnes": 1134000,
+            "financial_allocation": 5688000000
+        },
+        "CO2Avoided": {
+            "co2_tonnes": 17002877.7,
+            "financial_allocation": 11524800000
+        },
+        "EnergySaved": {
+            "energy_mwh": 14900000
+        },
+        "TotalRenewableCapacity": {
+            "capacity_mw": 14892000
+        },
+        "NewRenewableCapactity": {
+            "new_capacity_mw": 1619
+        },
+        "RenewableCapactity": {
+            "generation_mwh": 14892000,
+            "financial_allocation": 5688000000
+        }
+    },
+    "Apple Green Bond Report.pdf": {
+        "GreenBuildingArea": {
+            "area_sq_meters": 1400000,
+            "number_of_buildings": 24,
+            "financial_allocation": 1800000000,
+            "innovative_featuers": [
+                "100% renewable energy",
+                "On-site energy generation",
+                "Enhanced energy efficiency",
+                "Water conservation measures"
+            ]
+        },
+        "LandsConserved": {
+            "area_hectares": 46000,
+            "location": "Guizhou Province of China",
+            "financial_allocation": 550000000
+        },
+        "WasteDivertedFromLandfill": {
+            "waste_tonnes": 51000,
+            "financial_allocation": 689000000
+        },
+        "CO2Avoided": {
+            "co2_tonnes": 9305.7,
+            "financial_allocation": 15180370000
+        },
+        "EnergySaved": {
+            "energy_mwh": 3984.4
+        },
+        "TotalRenewableCapacity": {
+            "capacity_mw": 3532.72
+        },
+        "NewRenewableCapactity": {
+            "new_capacity_mw": 6840.4
+        },
+        "RenewableCapactity": {
+            "generation_mwh": 1854000,
+            "financial_allocation": 4700000000
+        }
+    },
+    "Bank of Ireland Green Bond Report.pdf": {
+        "GreenBuildingArea": {
+            "area_sq_meters": 3928796696,
+            "number_of_buildings": 9576,
+            "financial_allocation": 3572986537,
+            "innovative_featuers": [
+                "Solar panels",
+                "Rainwater harvesting",
+                "Green roofs",
+                "Energy efficient lighting",
+                "Set science based targets",
+                "Decarbonise our own operations",
+                "Provide sustainable financing",
+                "Manage climate related risks",
+                "Transparently report on our progress",
+                "Top 15% of residential properties in energy efficiency terms equivalent to a Building Energy Rating (BER) of B3 or better",
+                "Residential properties built in 2015 or later",
+                "New residential properties where the net primary energy demand is at least 20% lower than the primary energy demand resulting from the relevant NEZB requirements",
+                "Renovated residential property achieving a reduction of at least 30% in energy demand",
+                "Commercial property in the Republic of Ireland, UK and US holding a BREEAM13 'Outstanding' or 'Excellent' or LEED14 'Platinum' or 'Gold' Certification",
+                "Commercial properties belonging to the top 15% in Ireland and UK",
+                "New commercial property where the net primary energy demand is at least 20% lower than the primary energy demand resulting from the relevant NZEB requirements",
+                "Renovated commercial property achieving a reduction of at least 30% in energy demand"
+            ]
+        },
+        "LandsConserved": {
+            "area_hectares": 1000000,
+            "location": "Amazon Rainforest",
+            "financial_allocation": 50000000
+        },
+        "WasteDivertedFromLandfill": {
+            "waste_tonnes": 12651,
+            "financial_allocation": 3125478846
+        },
+        "CO2Avoided": {
+            "co2_tonnes": 153082.2,
+            "financial_allocation": 5239465383
+        },
+        "EnergySaved": {
+            "energy_mwh": 1.2
+        },
+        "TotalRenewableCapacity": {
+            "capacity_mw": 1.5
+        },
+        "NewRenewableCapactity": {
+            "new_capacity_mw": 1000
+        },
+        "RenewableCapactity": {
+            "generation_mwh": 20987,
+            "financial_allocation": 1001986537
+        }
+    },
+    "Visa Green Bond Report.pdf": {
+        "GreenBuildingArea": {
+            "area_sq_meters": 1200000,
+            "number_of_buildings": 23,
+            "financial_allocation": 500000000,
+            "innovative_featuers": [
+                "solar panels",
+                "rainwater harvesting",
+                "green roofs",
+                "energy efficient lighting"
+            ]
+        },
+        "LandsConserved": {
+            "area_hectares": null,
+            "location": "Dubai, UAE",
+            "financial_allocation": 500000000
+        },
+        "WasteDivertedFromLandfill": {
+            "waste_tonnes": 1.2,
+            "financial_allocation": 500000
+        },
+        "CO2Avoided": {
+            "co2_tonnes": 1000000,
+            "financial_allocation": 500000000
+        },
+        "EnergySaved": {
+            "energy_mwh": 3.23
+        },
+        "TotalRenewableCapacity": {
+            "capacity_mw": 5.6
+        },
+        "NewRenewableCapactity": {
+            "new_capacity_mw": null
+        },
+        "RenewableCapactity": {
+            "generation_mwh": 59190,
+            "financial_allocation": 500000000
+        }
+    },
+    "Walmart Green Bond Report.pdf": {
+        "GreenBuildingArea": {
+            "area_sq_meters": 3059000,
+            "number_of_buildings": 582,
+            "financial_allocation": 5437800000,
+            "innovative_featuers": [
+                "Solar panels",
+                "Rainwater harvesting",
+                "Green roofs",
+                "Energy efficient lighting",
+                "Energy-efficient lighting and building materials",
+                "On-site renewable energy generation",
+                "Water-efficient fixtures and landscaping",
+                "Waste diversion and recycling programs",
+                "LED lighting",
+                "Renewable energy sources",
+                "Water recycling systems",
+                "Energy efficient HVAC systems",
+                "Hydrogen-powered forklifts",
+                "Recycling Waste Streams into New Products",
+                "Zero Waste and Circular Economy",
+                "Sustainable refrigeration and HVAC systems",
+                "Expenditures related to buildings that have met within the last three years or are expected to meet regionally, nationally or internationally recognized \"green building\" standards or certifications such as LEED (gold or higher)"
+            ]
+        },
+        "LandsConserved": {
+            "area_hectares": 231145,
+            "location": "Appalachian Mountains, Arkansas, Colorado, Idaho, Missouri, Oklahoma, Oregon, Washington, Arkansas, United States, U.S. Projects, Arizona, California, Illinois, New Jersey, Louisiana, Maryland and South Carolina, Bentonville, Arkansas, United States, 42 states, the District of Columbia and Puerto Rico",
+            "financial_allocation": 2480700000
+        },
+        "WasteDivertedFromLandfill": {
+            "waste_tonnes": 5124180,
+            "financial_allocation": 1100000000
+        },
+        "CO2Avoided": {
+            "co2_tonnes": 1968463,
+            "financial_allocation": 1100000000
+        },
+        "EnergySaved": {
+            "energy_mwh": 4037569
+        },
+        "TotalRenewableCapacity": {
+            "capacity_mw": 1042
+        },
+        "NewRenewableCapactity": {
+            "new_capacity_mw": 1000
+        },
+        "RenewableCapactity": {
+            "generation_mwh": 7878410,
+            "financial_allocation": 3844400000
+        }
+    }
+}
