@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useMeetingStore } from "../stores/MeetingStore";
 import { useUserStore } from "../stores/UserStore";
-import CreateMeetingButton from "../components/CreateMeetingButton";
 import { Meeting } from "../services/meetingService";
 import { usePageStore, Page } from "../stores/PageStore";
 import { API_ENDPOINTS } from "../config/api";
-import HomeSidebar from "../components/HomeSidebar";
+import HomeSidebar from "./HomeSidebar";
 
 const Home = () => {
   const { user } = useUserStore();
   const [meetingList, setMeetingList] = useState<Meeting[]>([]);
-  const { currentMeeting, setCurrentMeeting } = useMeetingStore((state) => ({
-    currentMeeting: state.currentMeeting,
+  const { setCurrentMeeting } = useMeetingStore((state) => ({
     setCurrentMeeting: state.setCurrentMeeting,
   }));
   const { setPage } = usePageStore((state) => ({
@@ -31,28 +29,26 @@ const Home = () => {
     fetchMeetings();
   }, []);
 
-  const handleMeetingCreated = (meeting: Meeting) => {
-    setCurrentMeeting(meeting);
-    setPage(Page.MEETING);
-  };
-
   return (
     <div style={styles.container}>
       <HomeSidebar />
       <div style={styles.content}>
         <h1 style={styles.heading}>Welcome, {user.name}!</h1>
-        <CreateMeetingButton
-          userName={user.name}
-          userId={user.id as unknown as string}
-          onMeetingCreated={handleMeetingCreated}
-        />
         <h2 style={styles.heading}>Your Meetings</h2>
         <ul style={styles.meetingList}>
           {meetingList.map((meeting) => (
             <li key={meeting.id} style={styles.meetingItem}>
-              <span>{meeting.name}</span>
+              <div style={styles.meetingInfo}>
+                <span style={styles.meetingName}>{meeting.name}</span>
+                <span style={styles.participantCount}>
+                  Participants: {meeting.participants.length}
+                </span>
+              </div>
               <button
-                onClick={() => setCurrentMeeting(meeting)}
+                onClick={() => {
+                  setCurrentMeeting(meeting);
+                  setPage(Page.MEETING);
+                }}
                 style={styles.joinButton}
               >
                 Join
@@ -86,13 +82,26 @@ const styles = {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: "10px",
+    padding: "15px",
     margin: "10px 0",
     backgroundColor: "#f0f0f0",
     borderRadius: "4px",
   },
+  meetingInfo: {
+    display: "flex",
+    flexDirection: "column" as const,
+  },
+  meetingName: {
+    fontSize: "18px",
+    fontWeight: "bold",
+    marginBottom: "5px",
+  },
+  participantCount: {
+    fontSize: "14px",
+    color: "#666",
+  },
   joinButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#007bff",
     border: "none",
     color: "white",
     padding: "10px 20px",
