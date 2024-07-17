@@ -22,7 +22,7 @@ const Login = () => {
         alert("Found user in database but could not find credentials");
         return;
       }
-      setPage(Page.MEETING);
+      setPage(Page.HOME);
       return;
     }
     alert("User doesn't exist. Register instead.");
@@ -47,7 +47,7 @@ const Login = () => {
       return;
     }
 
-    setPage(Page.MEETING);
+    setPage(Page.HOME);
   }
 
   function areCredentialsWhitespace() {

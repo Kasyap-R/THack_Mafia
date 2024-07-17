@@ -14,7 +14,10 @@ export const API_ENDPOINTS = {
     SOCKET: `${AUDIO_URL}/`
   },
   MEETING: {
-    SOCKET: `ws://${STRIPPED_MEETING_URL}/ws`
-  }
+    SOCKET: `ws://${STRIPPED_MEETING_URL}/ws`,
+    CREATE: `${MEETING_URL}/create`,
+    JOIN: `${MEETING_URL}/join`,
+    MEETING_LIST:`${MEETING_URL}/`,
+  },
   // add more services and their endpoints as needed
 };

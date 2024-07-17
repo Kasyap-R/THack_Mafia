@@ -1,12 +1,12 @@
 import React from "react";
 import { usePageStore, Page } from "./stores/PageStore";
-import Login from "./pages/Login";
-import Meeting from "./pages/Meeting";
-import Home from "./pages/Home";
+import Login from "./pages/LoginPage";
+import MeetingPage from "./pages/MeetingPage";
+import Home from "./pages/HomePage";
 
 const pageComponents = {
   [Page.LOGIN]: Login,
-  [Page.MEETING]: Meeting,
+  [Page.MEETING]: MeetingPage,
   [Page.HOME]: Home,
 };
 
