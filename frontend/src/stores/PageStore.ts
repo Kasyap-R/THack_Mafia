@@ -12,6 +12,6 @@ interface PageState {
 }
 
 export const usePageStore = create<PageState>((set) => ({
-    currentPage: Page.MEETING,
+    currentPage: Page.LOGIN,
     setPage: (page: Page) => set({currentPage: page}),
 }));
