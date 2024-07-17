@@ -182,26 +182,26 @@ async def process_message(data: dict, meeting_id: str, username: str):
         await update_shared_state(meeting_id, updated_content)
 
 
-@app.websocket("/ws/{meeting_id}/{username}")
-async def websocket_endpoint(websocket: WebSocket, meeting_id: str, username: str):
-    await manager.connect(websocket, meeting_id)
-    try:
-        if meeting_id in shared_states:
-            await websocket.send_json(
-                {
-                    "type": "state_update",
-                    "content": shared_states[meeting_id].content.dict(),
-                }
-            )
+# @app.websocket("/ws/{meeting_id}/{username}")
+# async def websocket_endpoint(websocket: WebSocket, meeting_id: str, username: str):
+#     await manager.connect(websocket, meeting_id)
+#     try:
+#         if meeting_id in shared_states:
+#             await websocket.send_json(
+#                 {
+#                     "type": "state_update",
+#                     "content": shared_states[meeting_id].content.dict(),
+#                 }
+#             )
 
-        while True:
-            data = await websocket.receive_json()
-            await process_message(data, meeting_id, username)
-    except WebSocketDisconnect:
-        manager.disconnect(websocket, meeting_id)
-    except Exception as e:
-        print(f"Error in websocket: {str(e)}")
-        manager.disconnect(websocket, meeting_id)
+#         while True:
+#             data = await websocket.receive_json()
+#             await process_message(data, meeting_id, username)
+#     except WebSocketDisconnect:
+#         manager.disconnect(websocket, meeting_id)
+#     except Exception as e:
+#         print(f"Error in websocket: {str(e)}")
+#         manager.disconnect(websocket, meeting_id)
 
 
 app.include_router(router, prefix="/api/meeting")

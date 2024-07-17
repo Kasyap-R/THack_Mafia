@@ -1,12 +1,12 @@
 import os
 import json
-from fastapi import FastAPI, Depends, HTTPException, status, APIRouter, UploadFile, File
+from fastapi import FastAPI, Depends, HTTPException, status, APIRouter, UploadFile, File, WebSocket
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware
 from .services import getEmbeddings, scrape, generatePlots, setup, query_model, agent_organizer, get_summary
 import shutil
-from pydantic import BaseModel
-from .meeting import meeting_router
+from pydantic import BaseModel, Field
+from typing import Optional, Dict, Any
 
 app = FastAPI()
 
@@ -117,6 +117,98 @@ class ChatLogRequest(BaseModel):
 async def summarize(chat_logs: ChatLogRequest):
     return get_summary(chat_logs.logs)
 
-# Include the router with the prefix
+
+class ConnectionManager:
+    def __init__(self):
+        """keep list of active connections for each meeting"""
+        self.active_connections: Dict[str, List[WebSocket]] = {}
+
+    async def connect(self, websocket: WebSocket, meeting_id: str):
+        await websocket.accept()
+        if meeting_id not in self.active_connections:
+            self.active_connections[meeting_id] = []
+        self.active_connections[meeting_id].append(websocket)
+
+    def disconnect(self, websocket: WebSocket, meeting_id: str):
+        self.active_connections[meeting_id].remove(websocket)
+
+    async def broadcast(self, message: dict, meeting_id: str):
+        for connection in self.active_connections[meeting_id]:
+            await connection.send_json(message)
+
+
+manager = ConnectionManager()
+
+class SharedContent(BaseModel):
+    llm_answer: Optional[str] = Field(default=None)
+    username: str = Field(default="")
+    user_msg: str = Field(default="")
+    screen_image: Optional[List] = Field(default=None)
+
+class SharedState(BaseModel):
+    content: SharedContent = SharedContent()
+
+shared_states: Dict[str, SharedState] = {}
+
+async def update_shared_state(meeting_id: str, content: SharedContent):
+    if meeting_id not in shared_states:
+        shared_states[meeting_id] = SharedState()
+    shared_states[meeting_id].content = content
+    await manager.broadcast(
+        {"type": "state_update", "content": content.dict()}, meeting_id
+    )
+
+class LLMResponse(BaseModel):
+    type: str
+    content: Any
+
+
+def llm_response(query: str):
+   response = agent_organizer(query)
+   print(response)
+   return response
+
+async def process_message(data: dict, meeting_id: str, username: str):
+    if data["type"] == "text_query":
+        response = llm_response(data["query"])
+        llm_answer = None
+        screen_image = None
+        if response['type'] == "llm-response":
+            llm_answer = response['content']
+        elif response['type'] == "screen-update":
+            screen_image = response['content'][0]["List_charts"]
+
+        updated_content = SharedContent(
+            llm_answer=llm_answer,
+            username=username,
+            user_msg=data["query"],
+            screen_image=screen_image,
+        )
+        await update_shared_state(meeting_id, updated_content)
+
+
+@app.websocket("/ws/{meeting_id}/{username}")
+async def websocket_endpoint(websocket: WebSocket, meeting_id: str, username: str):
+    await manager.connect(websocket, meeting_id)
+    try:
+        if meeting_id in shared_states:
+            await websocket.send_json(
+                {
+                    "type": "state_update",
+                    "content": shared_states[meeting_id].content.dict(),
+                }
+            )
+
+        while True:
+            data = await websocket.receive_json()
+            await process_message(data, meeting_id, username)
+    except WebSocketDisconnect:
+        manager.disconnect(websocket, meeting_id)
+    except Exception as e:
+        print(f"Error in websocket: {str(e)}")
+        manager.disconnect(websocket, meeting_id)
+
+
+
+
 app.include_router(router, prefix="/ai")
-app.include_router(meeting_router, prefix="/api/meeting")

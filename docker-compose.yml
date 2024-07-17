@@ -39,17 +39,17 @@ services:
     depends_on:
       - database
 
-  # meeting-service:
-  #   build:
-  #     context: ./backend
-  #     dockerfile: meeting_service/Dockerfile
-  #   environment:
-  #     - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
-  #     - HOST_URL=${HOST_URL}
-  #   ports:
-  #     - "6500:8000"
-  #   depends_on:
-  #     - database
+  meeting-service:
+    build:
+      context: ./backend
+      dockerfile: meeting_service/Dockerfile
+    environment:
+      - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
+      - HOST_URL=${HOST_URL}
+    ports:
+      - "6500:8000"
+    depends_on:
+      - database
 
   ai-service:
     build:
