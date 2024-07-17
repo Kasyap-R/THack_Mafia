@@ -21,15 +21,11 @@ import json
 from typing import Dict, Any, Optional, List
 from pydantic import BaseModel, Field
 import tempfile
-import aiofiles
-import requests
-
-
-app = FastAPI()
+from .services import agent_organizer
 
 HOST_URL = os.getenv("HOST_URL")
 
-router = APIRouter()
+meeting_router = APIRouter()
 
 origins = [
     f"{HOST_URL}:3000",
@@ -37,30 +33,22 @@ origins = [
     "*",
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 meetings: Dict[str, Meeting] = {}
 
 
-@router.get("/")
+@meeting_router.get("/")
 async def get_all_meetings():
     return [meeting for meeting in meetings.values()]
 
 
-@router.get("/{meeting_id}", response_model=Meeting)
+@meeting_router.get("/{meeting_id}", response_model=Meeting)
 async def get_meeting(meeting_id: str):
     if meeting_id not in meetings:
         raise HTTPException(status_code=404, detail="Meeting not found")
     return meetings[meeting_id]
 
 
-@router.post("/create", response_model=Meeting)
+@meeting_router.post("/create", response_model=Meeting)
 async def create_meeting(meeting: MeetingCreate):
     meeting_id = generate_unique_id()
     new_meeting = Meeting(
@@ -73,7 +61,7 @@ async def create_meeting(meeting: MeetingCreate):
     return new_meeting
 
 
-@router.post("/join", response_model=Meeting)
+@meeting_router.post("/join", response_model=Meeting)
 async def join_meeting(meeting_join: MeetingJoin):
     if meeting_join.meeting_id not in meetings:
         raise HTTPException(status_code=404, detail="Meeting not found")
@@ -87,7 +75,7 @@ async def join_meeting(meeting_join: MeetingJoin):
     return meeting
 
 
-@router.post("/leave", response_model=Meeting)
+@meeting_router.post("/leave", response_model=Meeting)
 async def leave_meeting(meeting_leave: MeetingLeave):
     if meeting_leave.meeting_id not in meetings:
         raise HTTPException(status_code=404, detail="Meeting not found")
@@ -157,11 +145,9 @@ class LLMResponse(BaseModel):
 
 
 def llm_response(query: str):
-   url = "http://localhost:5000/ai/query/"
-   payload = json.dumps({"query": query})
-   headers = {'Content-Type': 'application/json'}
-   response = requests.request("POST", url, headers=headers, data=payload) 
-   return response.json()
+   response = agent_organizer(query)
+   print(response)
+   return response
 
 async def process_message(data: dict, meeting_id: str, username: str):
     if data["type"] == "text_query":
@@ -182,7 +168,7 @@ async def process_message(data: dict, meeting_id: str, username: str):
         await update_shared_state(meeting_id, updated_content)
 
 
-@app.websocket("/ws/{meeting_id}/{username}")
+@meeting_router.websocket("/ws/{meeting_id}/{username}")
 async def websocket_endpoint(websocket: WebSocket, meeting_id: str, username: str):
     await manager.connect(websocket, meeting_id)
     try:
@@ -202,9 +188,6 @@ async def websocket_endpoint(websocket: WebSocket, meeting_id: str, username: st
     except Exception as e:
         print(f"Error in websocket: {str(e)}")
         manager.disconnect(websocket, meeting_id)
-
-
-app.include_router(router, prefix="/api/meeting")
 
 
 if __name__ == "__main__":

@@ -176,7 +176,7 @@ def generatePlots(query):
     for dp in ans["List_charts"]:
         similar_info = retrieve_info(dp["description"])
         dp["rel_docs"] = similar_info
-    return {"type":"screen-update", "context": [ans]}
+    return {"type":"screen-update", "content": [ans]}
 
 def generateMatPlotLibCode(query):
     filename = './ImpFiles/data.json'

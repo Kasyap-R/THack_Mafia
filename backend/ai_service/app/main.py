@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .services import getEmbeddings, scrape, generatePlots, setup, query_model, agent_organizer, get_summary
 import shutil
 from pydantic import BaseModel
+from .meeting import meeting_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ router = APIRouter()
 # Allow front-end to make requests
 origins = [
     f"{HOST_URL}:3000",
+    f"{HOST_URL}:6500",
     "*",  # Used for local testing (i.e. Postman or curl)
 ]
 
@@ -117,3 +119,4 @@ async def summarize(chat_logs: ChatLogRequest):
 
 # Include the router with the prefix
 app.include_router(router, prefix="/ai")
+app.include_router(meeting_router, prefix="/api/meeting")

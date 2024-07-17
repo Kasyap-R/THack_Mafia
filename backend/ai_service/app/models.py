@@ -48,3 +48,21 @@ class Comparative_Chart(BaseModel):
 
 class List_of_charts(BaseModel):
     List_charts: List[Comparative_Chart] = Field(..., description="4 related Comparative Chart Objects that are all relevant to the question and data")
+
+class Meeting(BaseModel):
+    id: str
+    name: str
+    creator_id: str
+    participants: list[str]
+
+class MeetingCreate(BaseModel):
+    meeting_name: str
+    creator_id: str
+
+class MeetingJoin(BaseModel):
+    meeting_id: str
+    creator_id: str
+
+class MeetingLeave(BaseModel):
+    meeting_id: str
+    creator_id: str
