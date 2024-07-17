@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useMeetingStore } from "../stores/MeetingStore";
 import { useUserStore } from "../stores/UserStore";
-import CreateMeetingButton from "../components/CreateMeetingButton";
 import { Meeting } from "../services/meetingService";
 import { usePageStore, Page } from "../stores/PageStore";
 import { API_ENDPOINTS } from "../config/api";
+import HomeSidebar from "../components/HomeSidebar";
 
 const Home = () => {
   const { user } = useUserStore();
   const [meetingList, setMeetingList] = useState<Meeting[]>([]);
-  const { currentMeeting, setCurrentMeeting, chatHistory, updateChatHistory } =
-    useMeetingStore((state) => ({
-      chatHistory: state.chatHistory,
-      updateChatHistory: state.updateChatHistory,
-      currentMeeting: state.currentMeeting,
-      setCurrentMeeting: state.setCurrentMeeting,
-    }));
+  const { setCurrentMeeting } = useMeetingStore((state) => ({
+    setCurrentMeeting: state.setCurrentMeeting,
+  }));
   const { setPage } = usePageStore((state) => ({
     setPage: state.setPage,
   }));
 
   useEffect(() => {
-    // Fetch meeting list from an endpoint
     const fetchMeetings = async () => {
       try {
-        // Replace this with your actual API call
         const response = await fetch(API_ENDPOINTS.MEETING.MEETING_LIST);
         const meetings = await response.json();
         setMeetingList(meetings);
@@ -32,46 +26,45 @@ const Home = () => {
         console.error("Error fetching meetings:", error);
       }
     };
-
     fetchMeetings();
   }, []);
 
-  const handleMeetingCreated = (meeting: Meeting) => {
-    setCurrentMeeting(meeting);
-    setPage(Page.MEETING);
-  };
-
   return (
-    <div style={styles.homeContainer}>
-      <h1 style={styles.heading}>Welcome, {user.name}!</h1>
-      <CreateMeetingButton
-        userName={user.name}
-        userId={user.id as unknown as string}
-        onMeetingCreated={handleMeetingCreated}
-      />
-      <h2 style={styles.heading}>Your Meetings</h2>
-      <ul style={styles.meetingList}>
-        {meetingList.map((meeting) => (
-          <li key={meeting.id} style={styles.meetingItem}>
-            <span>{meeting.name}</span>
-            <button
-              onClick={() => setCurrentMeeting(meeting)}
-              style={styles.joinButton}
-            >
-              Join
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div style={styles.container}>
+      <HomeSidebar />
+      <div style={styles.content}>
+        <h1 style={styles.heading}>Welcome, {user.name}!</h1>
+        <h2 style={styles.heading}>Your Meetings</h2>
+        <ul style={styles.meetingList}>
+          {meetingList.map((meeting) => (
+            <li key={meeting.id} style={styles.meetingItem}>
+              <span>{meeting.name}</span>
+              <button
+                onClick={() => {
+                  setCurrentMeeting(meeting);
+                  setPage(Page.MEETING);
+                }}
+                style={styles.joinButton}
+              >
+                Join
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
 
 const styles = {
-  homeContainer: {
-    maxWidth: "800px",
-    margin: "0 auto",
+  container: {
+    display: "flex",
+    height: "100vh",
+  },
+  content: {
+    flex: 1,
     padding: "20px",
+    overflowY: "auto" as const,
   },
   heading: {
     color: "#333",

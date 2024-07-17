@@ -34,9 +34,8 @@ const CreateMeetingButton = ({
         onClick={() => setIsModalOpen(true)}
         style={styles.createMeetingBtn}
       >
-        Create New Meeting
+        New Meeting
       </button>
-
       {isModalOpen && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
@@ -68,18 +67,18 @@ const CreateMeetingButton = ({
 
 const styles = {
   createMeetingBtn: {
-    backgroundColor: "#4CAF50",
+    width: "100%",
+    padding: "15px",
+    fontSize: "18px",
+    backgroundColor: "#dfdfdf",
+    color: "#007bff",
+    fontWeight: "bold" as const,
     border: "none",
-    color: "white",
-    padding: "15px 32px",
-    textAlign: "center" as const,
-    textDecoration: "none",
-    display: "inline-block",
-    fontSize: "16px",
-    margin: "4px 2px",
+    borderRadius: "5px",
     cursor: "pointer",
-    borderRadius: "4px",
-    transition: "background-color 0.3s",
+    textAlign: "left" as const,
+    marginBottom: "10px",
+    transition: "background-color 0.3s, color 0.3s",
   },
   modalOverlay: {
     position: "fixed" as const,
@@ -91,18 +90,20 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    animation: "fadeIn 0.3s",
+    zIndex: 1000,
   },
   modal: {
     backgroundColor: "white",
     padding: "20px",
     borderRadius: "5px",
     boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
-    animation: "slideIn 0.3s",
+    width: "300px",
   },
   modalTitle: {
     marginTop: 0,
     color: "#333",
+    fontSize: "20px",
+    marginBottom: "15px",
   },
   meetingInput: {
     width: "100%",
@@ -111,6 +112,7 @@ const styles = {
     border: "1px solid #ddd",
     borderRadius: "4px",
     boxSizing: "border-box" as const,
+    fontSize: "16px",
   },
   buttonGroup: {
     display: "flex",
@@ -119,21 +121,22 @@ const styles = {
   },
   cancelBtn: {
     padding: "10px 20px",
-    marginLeft: "10px",
+    marginRight: "10px",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-    backgroundColor: "#f44336",
-    color: "white",
+    backgroundColor: "#f0f0f0",
+    color: "#333",
+    fontSize: "14px",
   },
   createBtn: {
     padding: "10px 20px",
-    marginLeft: "10px",
     border: "none",
     borderRadius: "4px",
     cursor: "pointer",
-    backgroundColor: "#4CAF50",
+    backgroundColor: "#007bff",
     color: "white",
+    fontSize: "14px",
   },
 };
 
