@@ -19,8 +19,8 @@ const Meeting = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        meeting_name: "Test Meeting",
-        creator_id: "H",
+        meeting_name: "test",
+        creator_id: `${user.name}`,
       }),
     });
     const data = await response.json();
@@ -33,6 +33,7 @@ const Meeting = () => {
       const ws = new WebSocket(
         `${API_ENDPOINTS.MEETING.SOCKET}/${meetingId}/${user.name}`
       );
+      console.log(`${API_ENDPOINTS.MEETING.SOCKET}/${meetingId}/${user.name}`);
 
       ws.onopen = () => {
         console.log("WebSocket connected");
