@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Meeting, meetingApi } from "../services/meetingService";
+import styled from "styled-components";
+import { Meeting } from "../services/meetingService";
+import DocumentUploadModal from "./DocumentUploadModal";
 
 interface CreateMeetingButtonProps {
   userName: string;
@@ -7,36 +9,62 @@ interface CreateMeetingButtonProps {
   onMeetingCreated: (meeting: Meeting) => void;
 }
 
+const MeetingButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  font-size: 18px;
+  background-color: transparent;
+  color: #007bff;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  margin-bottom: 20px;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: #007bff;
+    color: white;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+`;
+
 const CreateMeetingButton = ({
   userName,
   userId,
   onMeetingCreated,
 }: CreateMeetingButtonProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [meetingName, setMeetingName] = useState("");
 
-  const handleCreateMeeting = async () => {
-    try {
-      const meeting = await meetingApi.createMeeting({
-        meeting_name: meetingName,
-        creator_id: String(userId),
-      });
-      onMeetingCreated(meeting);
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error("Error creating meeting:", error);
-    }
+  const handleCreateMeeting = () => {
+    setIsCreateModalOpen(false);
+    setIsUploadModalOpen(true);
+  };
+
+  const handleMeetingCreated = (meeting: Meeting) => {
+    setIsUploadModalOpen(false);
+    onMeetingCreated(meeting);
   };
 
   return (
     <>
-      <button
-        onClick={() => setIsModalOpen(true)}
-        style={styles.createMeetingBtn}
-      >
-        New Meeting
-      </button>
-      {isModalOpen && (
+      <ButtonContainer>
+        <MeetingButton onClick={() => setIsCreateModalOpen(true)}>
+          New Meeting
+        </MeetingButton>
+        <MeetingButton onClick={() => console.log("Schedule Meeting clicked")}>
+          Schedule Meeting
+        </MeetingButton>
+      </ButtonContainer>
+      {isCreateModalOpen && (
         <div style={styles.modalOverlay}>
           <div style={styles.modal}>
             <h2 style={styles.modalTitle}>Create New Meeting</h2>
@@ -49,37 +77,31 @@ const CreateMeetingButton = ({
             />
             <div style={styles.buttonGroup}>
               <button
-                onClick={() => setIsModalOpen(false)}
+                onClick={() => setIsCreateModalOpen(false)}
                 style={styles.cancelBtn}
               >
                 Cancel
               </button>
               <button onClick={handleCreateMeeting} style={styles.createBtn}>
-                Create Meeting
+                Next
               </button>
             </div>
           </div>
         </div>
+      )}
+      {isUploadModalOpen && (
+        <DocumentUploadModal
+          onClose={() => setIsUploadModalOpen(false)}
+          onMeetingCreated={handleMeetingCreated}
+          meetingName={meetingName}
+          userId={userId}
+        />
       )}
     </>
   );
 };
 
 const styles = {
-  createMeetingBtn: {
-    width: "100%",
-    padding: "15px",
-    fontSize: "18px",
-    backgroundColor: "#dfdfdf",
-    color: "#007bff",
-    fontWeight: "bold" as const,
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    textAlign: "left" as const,
-    marginBottom: "10px",
-    transition: "background-color 0.3s, color 0.3s",
-  },
   modalOverlay: {
     position: "fixed" as const,
     top: 0,
