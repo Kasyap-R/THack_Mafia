@@ -8,14 +8,114 @@ import { API_ENDPOINTS } from "../config/api";
 import { Meeting, meetingApi } from "../services/meetingService";
 import MultiScreenChartDisplay from "../components/MultiScreenChartDisplay";
 import ExportButtonComponent from "../components/ExportButtonComponent";
-import "./MeetingPage.css";
-import logo from "../images/mAItLogo.png";
-import settings from "../images/settings.png";
-import upload from "../images/upload.png";
-import microphone from "../images/microphone.png";
-import send from "../images/send.png";
-import voice from "../images/voice.png";
-import mAItIconWhite from "../images/mAItIconWhite.png";
+
+const MeetingContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #dce2ee;
+  font-family: "RingsideNarrow", sans-serif;
+  overflow: hidden;
+`;
+
+const TopBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: white;
+  border-bottom: 1px solid white;
+  height: 60px;
+`;
+
+const SmallLogo = styled.img`
+  width: 0px;
+  margin-left: 80px;
+`;
+
+const AddButton = styled.button`
+  background-color: transparent;
+  color: #dce2ee;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  cursor: pointer;
+  margin-right: 10px;
+`;
+
+const ContentWrapper = styled.div`
+  display: flex;
+  height: calc(100vh - 120px); // Subtracting TopBar and BottomBar heights
+`;
+
+const Whiteboard = styled.div`
+  flex-grow: 1;
+  background-color: white;
+  border: 1px solid white;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  overflow: hidden;
+`;
+
+const ChatBoxWrapper = styled.div`
+  width: 300px;
+  height: 100%;
+  border-left: 1px solid #ccc;
+`;
+
+const BottomBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #82a4eb;
+  padding: 10px 20px;
+  height: 60px;
+`;
+
+const CircularIcons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const CircularIcon = styled.div`
+  background-color: white;
+  border: 3px solid #08238c;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+`;
+
+const CentralizedChatInput = styled.div`
+  display: flex;
+  align-items: center;
+  width: 50%;
+  max-width: 500px;
+`;
+
+const ChatInput = styled.input`
+  flex-grow: 1;
+  padding: 8px;
+  border-radius: 20px;
+  border: 2px solid #08238c;
+  font-size: 14px;
+`;
+
+const VoiceButton = styled.button<{ isListening: boolean }>`
+  width: 30px;
+  height: 30px;
+  background-color: ${(props) => (props.isListening ? "#ff4444" : "white")};
+  border: 2px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+`;
 
 const MeetingPage = () => {
   const { user } = useUserStore();
@@ -126,68 +226,47 @@ const MeetingPage = () => {
       setChatInput("");
     }
   };
-  const [numPeople, setNumPeople] = useState(4);
-  const fakeParticipants = ["John", "Neli", "Scott"];
-  const badCode = "XYZ";
 
   return (
-    <div className="meeting-container">
-      <div className="top-bar">
-        <img src={logo} alt="Logo" className="small-logo" />
-      </div>
-      <div className="left-bar">
-        <button className="mAIt-white-button">
-          <img src={mAItIconWhite} alt="mAIt" className="mAIt-icon" />
-        </button>
-        <button className="menu-button">&#9776;</button>
-        <div className="bottom-buttons">
-          <button className="settings-button">
-            <img src={settings} alt="Settings" className="settings-icon" />
-          </button>
-        </div>
-      </div>
-      <div className="content-wrapper">
-        <div className="whiteboard">
+    <MeetingContainer>
+      <TopBar>
+        <SmallLogo alt="Logo" />
+        <AddButton>{<ExportButtonComponent />}</AddButton>
+      </TopBar>
+      <ContentWrapper>
+        <Whiteboard>
           {screenState.length > 0 && (
             <MultiScreenChartDisplay screenStates={screenState as any} />
           )}
-        </div>
-        <div className="chat-box-wrapper">
+        </Whiteboard>
+        <ChatBoxWrapper>
           <ChatBoxComponent chatHistory={chatHistory} />
-        </div>
-      </div>
-      <div className="bottom-bar">
-        <div className="circular-icons">
-          {fakeParticipants.map((x, index) => (
-            <div key={index} className="icon">
-              {x}
-            </div>
-          ))}
-        </div>
-      </div>
-      <div className="chat-box">
+        </ChatBoxWrapper>
+      </ContentWrapper>
+      <BottomBar>
         <AudioComponent userId={user.id as number} />
-        <button
-          className="voice-button"
-          onClick={() => setIsListening(!isListening)}
-        >
-          <img src={voice} alt="Voice" className="voice-icon" />
-        </button>
-        <input
-          type="text"
-          placeholder="Insert Prompt..."
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-        />
-        <button className="send-button" onClick={handleSendMessage}>
-          <img src={send} alt="Send" className="send-icon" />
-        </button>
-      </div>
-      <button className="add-button">
-        <ExportButtonComponent />
-      </button>
-    </div>
+        <CentralizedChatInput>
+          <VoiceButton
+            isListening={isListening}
+            onClick={() => setIsListening(!isListening)}
+          >
+            🎤
+          </VoiceButton>
+          <ChatInput
+            type="text"
+            placeholder="Insert Prompt..."
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+          />
+        </CentralizedChatInput>
+        <CircularIcons>
+          {currentMeeting?.participants.map((_, index) => (
+            <CircularIcon key={index} />
+          ))}
+        </CircularIcons>
+      </BottomBar>
+    </MeetingContainer>
   );
 };
 

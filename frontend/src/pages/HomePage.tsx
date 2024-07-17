@@ -35,9 +35,8 @@ const MeetingList = styled.ul`
 const Home = () => {
   const { user } = useUserStore();
   const [meetingList, setMeetingList] = useState<Meeting[]>([]);
-  const { currrentMeeting, setCurrentMeeting } = useMeetingStore((state) => ({
+  const { setCurrentMeeting } = useMeetingStore((state) => ({
     setCurrentMeeting: state.setCurrentMeeting,
-    currrentMeeting: state.currentMeeting,
   }));
   const { setPage } = usePageStore((state) => ({
     setPage: state.setPage,
@@ -47,14 +46,8 @@ const Home = () => {
     const fetchMeetings = async () => {
       try {
         const response = await fetch(API_ENDPOINTS.MEETING.MEETING_LIST);
-        const meetings: any = await response.json();
-        const fake: Meeting = {
-          id: "2",
-          name: "Executive Onboarding",
-          creator_id: "4",
-          participants: [" ", " . ", ""],
-        };
-        setMeetingList([...meetings, fake]);
+        const meetings = await response.json();
+        setMeetingList(meetings);
       } catch (error) {
         console.error("Error fetching meetings:", error);
       }

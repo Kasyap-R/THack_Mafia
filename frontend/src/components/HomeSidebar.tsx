@@ -3,9 +3,9 @@ import { usePageStore, Page } from "../stores/PageStore";
 import { useUserStore } from "../stores/UserStore";
 import { useMeetingStore } from "../stores/MeetingStore";
 import { Meeting } from "../services/meetingService";
-import logo from "../images/mAItLogoGlow.png";
-import userIcon from "../images/user.png";
-import settingsIcon from "../images/settings.png";
+//import logo from "../images/mAItLogoGlow.png";
+//import userIcon from "../images/user.png";
+//import settingsIcon from "../images/settings.png";
 import CreateMeetingButton from "../components/CreateMeetingButton";
 
 const HomeSidebar: React.FC = () => {
@@ -22,7 +22,7 @@ const HomeSidebar: React.FC = () => {
     <div style={styles.sidebar}>
       <div>
         <div style={styles.logo}>
-          <img src={logo} alt="Logo" style={styles.logoImage} />
+          {/* <img src={logo} alt="Logo" style={styles.logoImage} /> */}
         </div>
         <ul style={styles.ul}>
           <li style={styles.li}>
@@ -37,14 +37,13 @@ const HomeSidebar: React.FC = () => {
       <div style={styles.minibuttonsContainer}>
         <button
           style={{
-            ...styles.minibutton,
-            backgroundImage: `url(${userIcon})`,
+            ...styles.minibutton /*backgroundImage: `url(${userIcon})`*/,
           }}
         ></button>
         <button
           style={{
             ...styles.minibutton,
-            backgroundImage: `url(${settingsIcon})`,
+            //backgroundImage: `url(${settingsIcon})`,
           }}
         ></button>
       </div>

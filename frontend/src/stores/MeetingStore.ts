@@ -24,7 +24,7 @@ interface MeetingState {
     setCurrentMeeting: (meeting: Meeting) => void;
 }
 
-export const useMeetingStore = create<MeetingState>((set, get) => ({
+export const useMeetingStore = create<MeetingState>((set) => ({
     users: [],
     images: [],
     chatHistory: [],

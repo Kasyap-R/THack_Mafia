@@ -153,11 +153,7 @@ const AudioComponent = ({ userId }: AudioProps) => {
     <div>
       <div
         onClick={toggleMute}
-        style={{
-          cursor: "pointer",
-          color: isMuted ? "red" : "green",
-          marginRight: 5,
-        }}
+        style={{ cursor: "pointer", color: isMuted ? "red" : "green" }}
       >
         <FontAwesomeIcon
           icon={isMuted ? faMicrophoneSlash : faMicrophone}
