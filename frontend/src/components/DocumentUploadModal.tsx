@@ -90,9 +90,9 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
         meeting_name: meetingName,
         creator_id: userId,
       });
-
       // Here you would typically upload the files to your backend
       // For now, we'll just log them
+      // UPLOAD DOCUMENTS
       console.log("Files to upload:", files);
 
       onMeetingCreated(meeting);
