@@ -2,6 +2,65 @@ import React, { useState } from "react";
 import { Page, usePageStore } from "../stores/PageStore";
 import { auth, UserCredentials } from "../services/authService";
 import { useUserStore, User } from "../stores/UserStore";
+import logo from "../images/mAItLogoGlow.png"; // Make sure to import the logo
+
+const styles = {
+  body: {
+    margin: 0,
+    fontFamily: '"RingsideNarrow", sans-serif',
+  },
+  loginContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+    backgroundColor: "#08238C",
+  },
+  loginBox: {
+    fontFamily: '"RingsideNarrow", sans-serif',
+    textAlign: "center" as const,
+    backgroundColor: "#DCE2EE",
+    padding: "40px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
+    width: "500px",
+  },
+  logo: {
+    width: "300px",
+    marginBottom: "20px",
+  },
+  inputField: {
+    display: "block",
+    width: "100%",
+    padding: "10px",
+    marginBottom: "15px",
+    border: "1px solid #041354",
+    borderRadius: "5px",
+    fontSize: "16px",
+    fontFamily: '"RingsideNarrow", sans-serif',
+    fontWeight: "lighter",
+    boxSizing: "border-box" as const,
+  },
+  button: {
+    fontFamily: '"RingsideNarrow", sans-serif',
+    width: "51%",
+    padding: "10px",
+    border: "none",
+    borderRadius: "5px",
+    fontSize: "16px",
+    cursor: "pointer",
+    marginBottom: "10px",
+    boxSizing: "border-box" as const,
+  },
+  loginButton: {
+    backgroundColor: "#82A4EB",
+    color: "#041354",
+  },
+  createAccountButton: {
+    backgroundColor: "#041354",
+    color: "#82A4EB",
+  },
+};
 
 const Login = () => {
   const { setPage } = usePageStore();
@@ -42,38 +101,48 @@ const Login = () => {
       setUser({ name: response.username, id: response.user_id });
     } else {
       alert(
-        "Added user in database but did not recieve registered credentials"
+        "Added user in database but did not receive registered credentials"
       );
       return;
     }
-
     setPage(Page.HOME);
   }
 
   function areCredentialsWhitespace() {
     return password.trim().length === 0 || username.trim().length === 0;
   }
+
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Create your account</h2>
-      <div>
+    <div style={styles.loginContainer}>
+      <div style={styles.loginBox}>
+        <img src={logo} alt="Logo" style={styles.logo} />
         <input
           type="text"
           placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          style={styles.inputField}
         />
-      </div>
-      <div>
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          style={styles.inputField}
         />
+        <button
+          onClick={handleLogin}
+          style={{ ...styles.button, ...styles.loginButton }}
+        >
+          Login
+        </button>
+        <button
+          onClick={handleRegister}
+          style={{ ...styles.button, ...styles.createAccountButton }}
+        >
+          Create Account
+        </button>
       </div>
-      <button onClick={handleLogin}>Sign up</button>
-      <button onClick={handleRegister}>Register</button>
     </div>
   );
 };
