@@ -1,134 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { Chat } from "../stores/MeetingStore"; // Adjust the import if necessary
+import React from "react";
+import styled from "styled-components";
+import { Chat } from "../stores/MeetingStore";
 
 interface ChatProps {
   chatHistory: Chat[];
-  onNewChat: (chat: Chat) => void;
 }
 
-const ChatBoxComponent: React.FC<ChatProps> = ({ chatHistory, onNewChat }) => {
-  const [inputText, setInputText] = useState<string>("");
-  const [isListening, setIsListening] = useState<boolean>(false);
+const ChatContainer = styled.div`
+  width: 300px;
+  height: calc(100vh - 180px); // Adjust as needed
+  position: fixed;
+  right: 20px;
+  top: 90px; // Adjust based on your top bar height
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow-y: auto;
+`;
 
-  useEffect(() => {
-    const SpeechRecognition =
-      (window as any).SpeechRecognition ||
-      (window as any).webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
+const ChatMessage = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #fff;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+`;
 
-    recognition.onresult = (e: any) => {
-      const transcript = inputText + " " + e.results[0][0].transcript;
-      setInputText(transcript);
-      setIsListening(false);
-    };
-
-    recognition.onend = () => setIsListening(false);
-
-    if (isListening) {
-      recognition.start();
-    } else {
-      recognition.stop();
-    }
-
-    return () => recognition.abort();
-  }, [isListening]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (inputText.trim()) {
-      onNewChat({ user: "User", message: inputText.trim() });
-      setInputText("");
-    }
-  };
-
+const ChatBoxComponent: React.FC<ChatProps> = ({ chatHistory }) => {
   return (
-    <div style={styles.container}>
-      <div style={styles.chatBox}>
-        {chatHistory.map((chat: Chat, index: number) => (
-          <div key={index} style={styles.chatMessage}>
-            <strong>{chat.user}:</strong> {chat.message}
-          </div>
-        ))}
-      </div>
-      <form onSubmit={handleSubmit} style={styles.inputContainer}>
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          style={styles.input}
-          placeholder="Type or speak your message..."
-        />
-        <button
-          type="button"
-          onClick={() => setIsListening(!isListening)}
-          style={{
-            ...styles.micButton,
-            backgroundColor: isListening ? "#ff4444" : "transparent",
-          }}
-        >
-          🎤
-        </button>
-        <button type="submit" style={styles.sendButton}>
-          Send
-        </button>
-      </form>
-    </div>
+    <ChatContainer>
+      {chatHistory.map((chat: Chat, index: number) => (
+        <ChatMessage key={index}>
+          <strong>{chat.user}:</strong> {chat.message}
+        </ChatMessage>
+      ))}
+    </ChatContainer>
   );
-};
-
-const styles: { [key: string]: React.CSSProperties } = {
-  container: {
-    maxWidth: "300px",
-    margin: "0 auto",
-  },
-  chatBox: {
-    border: "1px solid #ccc",
-    padding: "10px",
-    height: "400px",
-    overflowY: "scroll",
-    display: "flex",
-    flexDirection: "column",
-    backgroundColor: "#f9f9f9",
-  },
-  chatMessage: {
-    border: "1px solid #ddd",
-    borderRadius: "5px",
-    padding: "5px",
-    margin: "5px 0",
-    backgroundColor: "#fff",
-    whiteSpace: "pre-wrap",
-    wordWrap: "break-word",
-  },
-  inputContainer: {
-    display: "flex",
-    marginTop: "10px",
-  },
-  input: {
-    flex: 1,
-    padding: "5px",
-    fontSize: "16px",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-  },
-  micButton: {
-    padding: "5px 10px",
-    marginLeft: "5px",
-    backgroundColor: "transparent",
-    border: "1px solid #ccc",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
-  sendButton: {
-    padding: "5px 10px",
-    marginLeft: "5px",
-    backgroundColor: "#007bff",
-    color: "white",
-    border: "none",
-    borderRadius: "3px",
-    cursor: "pointer",
-    fontSize: "16px",
-  },
 };
 
 export default ChatBoxComponent;

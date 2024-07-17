@@ -162,23 +162,15 @@ const StyledChatBox = styled.div`
   margin-bottom: 100px;
 `;
 
-const ChatInput = styled.input`
-  flex-grow: 1;
-  width: 100%;
-  padding: 10px;
-  border-radius: 20px;
-  border: 5px solid #08238c;
-  font-size: 16px;
-`;
-
-const VoiceButton = styled.button`
-  width: 55px;
-  height: 55px;
-  background-color: white;
-  border: 4px solid black;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-right: 25px;
+const CentralizedChatInput = styled.div`
+  position: fixed;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  width: 700px;
+  margin-bottom: 100px;
 `;
 
 const SendButton = styled.button`
@@ -189,6 +181,28 @@ const SendButton = styled.button`
   border-radius: 50%;
   cursor: pointer;
   margin-left: 20px;
+`;
+
+const ChatInput = styled.input`
+  flex-grow: 1;
+  width: 100%;
+  padding: 10px;
+  border-radius: 20px;
+  border: 5px solid #08238c;
+  font-size: 16px;
+`;
+
+const VoiceButton = styled.button<{ isListening: boolean }>`
+  width: 55px;
+  height: 55px;
+  background-color: ${(props) => (props.isListening ? "#ff4444" : "white")};
+  border: 4px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-right: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const MeetingPage = () => {
@@ -202,6 +216,7 @@ const MeetingPage = () => {
     }));
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [chatInput, setChatInput] = useState("");
+  const [isListening, setIsListening] = useState(false);
 
   useEffect(() => {
     const initializeMeeting = async () => {
@@ -227,6 +242,25 @@ const MeetingPage = () => {
       }
     };
   }, []);
+
+  useEffect(() => {
+    const SpeechRecognition =
+      (window as any).SpeechRecognition ||
+      (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.onresult = (e: any) => {
+      const transcript = chatInput + " " + e.results[0][0].transcript;
+      setChatInput(transcript);
+      setIsListening(false);
+    };
+    recognition.onend = () => setIsListening(false);
+    if (isListening) {
+      recognition.start();
+    } else {
+      recognition.stop();
+    }
+    return () => recognition.abort();
+  }, [isListening]);
 
   const connectWebSocket = (meetingId: string) => {
     const ws = new WebSocket(
@@ -275,7 +309,7 @@ const MeetingPage = () => {
   return (
     <MeetingContainer>
       <TopBar>
-        {/* <SmallLogo src={logo} alt="Logo" /> */}
+        <SmallLogo /*src={logo}*/ alt="Logo" />
         <AddButton>
           {/* <img
             src={upload}
@@ -300,24 +334,8 @@ const MeetingPage = () => {
           </SettingsButton>
         </BottomButtons>
       </LeftBar>
-      <Whiteboard>
-        {currentMeeting ? (
-          <>
-            <MeetingInfo>
-              <MeetingTitle>Meeting Name: {currentMeeting.name}</MeetingTitle>
-              <ParticipantCount>
-                Participants: {currentMeeting.participants.length}
-              </ParticipantCount>
-            </MeetingInfo>
-            <ChatBoxComponent
-              chatHistory={chatHistory}
-              onNewChat={handleNewUserChat}
-            />
-          </>
-        ) : (
-          <p>Loading meeting...</p>
-        )}
-      </Whiteboard>
+      <Whiteboard></Whiteboard>
+      <ChatBoxComponent chatHistory={chatHistory} />
       <BottomBar>
         <CircularIcons>
           {currentMeeting?.participants.map((_, index) => (
@@ -325,8 +343,15 @@ const MeetingPage = () => {
           ))}
         </CircularIcons>
       </BottomBar>
-      <StyledChatBox>
-        <VoiceButton>{/* <Icon src={voice} alt="Voice" /> */}</VoiceButton>
+      <CentralizedChatInput>
+        <VoiceButton
+          isListening={isListening}
+          onClick={() => setIsListening(!isListening)}
+        >
+          🎤
+          {/* You can replace the microphone emoji with an image if desired */}
+          {/* <img src={voice} alt="Voice" style={{ width: "24px", height: "24px" }} /> */}
+        </VoiceButton>
         <ChatInput
           type="text"
           placeholder="Insert Prompt..."
@@ -334,10 +359,7 @@ const MeetingPage = () => {
           onChange={(e) => setChatInput(e.target.value)}
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
-        <SendButton onClick={handleSendMessage}>
-          {/* <Icon src={send} alt="Send" /> */}
-        </SendButton>
-      </StyledChatBox>
+      </CentralizedChatInput>
     </MeetingContainer>
   );
 };
