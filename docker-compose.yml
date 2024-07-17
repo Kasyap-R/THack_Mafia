@@ -59,7 +59,7 @@ services:
       - DATABASE_URL=mysql+mysqlconnector://root:${MYSQL_ROOT_PASSWORD}@db:3306/${MYSQL_DATABASE}
       - HOST_URL=${HOST_URL}
     ports:
-      - "5000:8000"
+      - "5500:8000"
     depends_on:
       - database
   

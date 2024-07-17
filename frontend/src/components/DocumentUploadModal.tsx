@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { Meeting, meetingApi } from "../services/meetingService";
+import { API_ENDPOINTS } from "../config/api";
 
 interface DocumentUploadModalProps {
   onClose: () => void;
@@ -37,13 +38,14 @@ const Title = styled.h2`
   margin-bottom: 15px;
 `;
 
-const UploadArea = styled.div`
-  border: 2px dashed #007bff;
+const UploadArea = styled.div<{ isDragging: boolean }>`
+  border: 2px dashed ${(props) => (props.isDragging ? "#00ff00" : "#007bff")};
   border-radius: 5px;
   padding: 20px;
   text-align: center;
   margin-bottom: 20px;
   cursor: pointer;
+  transition: all 0.3s ease;
 `;
 
 const ButtonGroup = styled.div`
@@ -76,11 +78,40 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
   meetingName,
   userId,
 }) => {
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      setFiles(Array.from(event.target.files));
+      setFiles(event.target.files);
+    }
+  };
+
+  const handleDragEnter = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      setFiles(e.dataTransfer.files);
+      e.dataTransfer.clearData();
     }
   };
 
@@ -90,11 +121,23 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
         meeting_name: meetingName,
         creator_id: userId,
       });
-      // Here you would typically upload the files to your backend
-      // For now, we'll just log them
-      // UPLOAD DOCUMENTS
-      console.log("Files to upload:", files);
-
+      if (files && files.length > 0) {
+        const formData = new FormData();
+        for (let i = 0; i < files.length; i++) {
+          formData.append("files", files[i]);
+        }
+        try {
+          const response = await fetch(API_ENDPOINTS.AI.UPLOAD, {
+            method: "POST",
+            body: formData,
+          });
+          if (!response.ok) {
+            throw new Error("File upload failed");
+          }
+        } catch (error) {
+          console.error("Error uploading files:", error);
+        }
+      }
       onMeetingCreated(meeting);
     } catch (error) {
       console.error("Error creating meeting:", error);
@@ -105,8 +148,16 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
     <ModalOverlay>
       <ModalContent>
         <Title>Upload Documents</Title>
-        <UploadArea>
+        <UploadArea
+          isDragging={isDragging}
+          onClick={() => fileInputRef.current?.click()}
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+        >
           <input
+            ref={fileInputRef}
             type="file"
             multiple
             onChange={handleFileUpload}
@@ -114,7 +165,7 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
             id="file-upload"
           />
           <label htmlFor="file-upload">
-            {files.length > 0
+            {files && files.length > 0
               ? `${files.length} file(s) selected`
               : "Click or drag files to upload"}
           </label>
@@ -122,7 +173,7 @@ const DocumentUploadModal: React.FC<DocumentUploadModalProps> = ({
         <ButtonGroup>
           <CancelButton onClick={onClose}>Cancel</CancelButton>
           <ContinueButton onClick={handleCreateMeeting}>
-            {files.length > 0
+            {files && files.length > 0
               ? "Upload and Create Meeting"
               : "Create Meeting without Documents"}
           </ContinueButton>

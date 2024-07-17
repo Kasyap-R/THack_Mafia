@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Page, usePageStore } from "../stores/PageStore";
 import { auth, UserCredentials } from "../services/authService";
 import { useUserStore, User } from "../stores/UserStore";
-import logo from "../images/mAItLogoGlow.png"; // Make sure to import the logo
+//import logo from "../images/mAItLogoGlow.png"; // Make sure to import the logo
 
 const styles = {
   body: {
@@ -115,7 +115,7 @@ const Login = () => {
   return (
     <div style={styles.loginContainer}>
       <div style={styles.loginBox}>
-        <img src={logo} alt="Logo" style={styles.logo} />
+        {/* <img src={logo} alt="Logo" style={styles.logo} /> */}
         <input
           type="text"
           placeholder="Username"

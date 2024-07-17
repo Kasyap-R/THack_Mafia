@@ -8,12 +8,12 @@ import { API_ENDPOINTS } from "../config/api";
 import { Meeting, meetingApi } from "../services/meetingService";
 
 // Import your images here
-import logo from "../images/mAItLogo.png";
-import settings from "../images/settings.png";
-import upload from "../images/upload.png";
-import send from "../images/send.png";
-import voice from "../images/voice.png";
-import mAItIconWhite from "../images/mAItIconWhite.png";
+//import logo from "../images/mAItLogo.png";
+//import settings from "../images/settings.png";
+//import upload from "../images/upload.png";
+//import send from "../images/send.png";
+//import voice from "../images/voice.png";
+//import mAItIconWhite from "../images/mAItIconWhite.png";
 
 const MeetingContainer = styled.div`
   display: flex;
@@ -275,28 +275,28 @@ const MeetingPage = () => {
   return (
     <MeetingContainer>
       <TopBar>
-        <SmallLogo src={logo} alt="Logo" />
+        {/* <SmallLogo src={logo} alt="Logo" /> */}
         <AddButton>
-          <img
+          {/* <img
             src={upload}
             alt="+"
             style={{ width: "100px", height: "100px" }}
-          />
+          /> */}
         </AddButton>
       </TopBar>
       <LeftBar>
         <MAItWhiteButton>
-          <img
+          {/* <img
             src={mAItIconWhite}
             alt="mAIt"
             style={{ width: "60px", height: "60px" }}
-          />
+          /> */}
         </MAItWhiteButton>
         <MenuButton>&#9776;</MenuButton>
         <BottomButtons>
           <AudioComponent userId={user.id as number} />
           <SettingsButton>
-            <Icon src={settings} alt="Settings" />
+            {/* <Icon src={settings} alt="Settings" /> */}
           </SettingsButton>
         </BottomButtons>
       </LeftBar>
@@ -326,9 +326,7 @@ const MeetingPage = () => {
         </CircularIcons>
       </BottomBar>
       <StyledChatBox>
-        <VoiceButton>
-          <Icon src={voice} alt="Voice" />
-        </VoiceButton>
+        <VoiceButton>{/* <Icon src={voice} alt="Voice" /> */}</VoiceButton>
         <ChatInput
           type="text"
           placeholder="Insert Prompt..."
@@ -337,7 +335,7 @@ const MeetingPage = () => {
           onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
         />
         <SendButton onClick={handleSendMessage}>
-          <Icon src={send} alt="Send" />
+          {/* <Icon src={send} alt="Send" /> */}
         </SendButton>
       </StyledChatBox>
     </MeetingContainer>
