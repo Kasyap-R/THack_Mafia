@@ -8,14 +8,6 @@ import { API_ENDPOINTS } from "../config/api";
 import { Meeting, meetingApi } from "../services/meetingService";
 import MultiScreenChartDisplay from "../components/MultiScreenChartDisplay";
 
-// Import your images here
-//import logo from "../images/mAItLogo.png";
-//import settings from "../images/settings.png";
-//import upload from "../images/upload.png";
-//import send from "../images/send.png";
-//import voice from "../images/voice.png";
-//import mAItIconWhite from "../images/mAItIconWhite.png";
-
 const MeetingContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -50,92 +42,33 @@ const AddButton = styled.button`
   margin-right: 10px;
 `;
 
-const LeftBar = styled.div`
+const ContentWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background-color: #08238c;
-  width: 90px;
-  padding: 10px 0;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1;
-`;
-
-const MenuButton = styled.button`
-  background-color: #08238c;
-  color: white;
-  border: none;
-  font-size: 24px;
-  cursor: pointer;
-  padding: 10px;
-`;
-
-const BottomButtons = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const SettingsButton = styled.button`
-  background-color: white;
-  color: #08238c;
-  border: none;
-  border-radius: 50%;
-  width: 60px;
-  height: 60px;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 10px 0;
-`;
-
-const Icon = styled.img`
-  width: 40px;
-  height: 40px;
-`;
-
-const MAItWhiteButton = styled.button`
-  background-color: transparent;
-  border-color: transparent;
+  height: calc(100vh - 70px); // Adjust based on your TopBar height
 `;
 
 const Whiteboard = styled.div`
   flex-grow: 1;
-  margin-left: 90px;
   background-color: white;
   border: 1px solid white;
   display: flex;
   flex-direction: column;
   padding: 20px;
+  overflow-y: auto;
 `;
 
-const MeetingInfo = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
-const MeetingTitle = styled.h2`
-  font-size: 24px;
-  margin: 0;
-  margin-right: 20px;
-`;
-
-const ParticipantCount = styled.span`
-  font-size: 18px;
-  color: #666;
+const ChatBoxWrapper = styled.div`
+  width: 300px; // Adjust width as needed
+  height: 100%;
+  border-left: 1px solid #ccc;
 `;
 
 const BottomBar = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   background-color: #82a4eb;
-  padding: 30px 0;
-  position: fixed;
-  bottom: 0;
+  padding: 15px 20px;
   width: 100%;
 `;
 
@@ -148,59 +81,33 @@ const CircularIcon = styled.div`
   background-color: white;
   border: 5px solid #08238c;
   border-radius: 50%;
-  width: 80px;
-  height: 80px;
-`;
-
-const StyledChatBox = styled.div`
-  position: fixed;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  width: 700px;
-  margin-bottom: 100px;
+  width: 40px;
+  height: 40px;
 `;
 
 const CentralizedChatInput = styled.div`
-  position: fixed;
-  bottom: 60px;
-  left: 50%;
-  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  width: 700px;
-  margin-bottom: 100px;
-`;
-
-const SendButton = styled.button`
-  width: 70px;
-  height: 70px;
-  background-color: white;
-  border: 4px solid transparent;
-  border-radius: 50%;
-  cursor: pointer;
-  margin-left: 20px;
+  width: 50%;
+  max-width: 700px;
 `;
 
 const ChatInput = styled.input`
   flex-grow: 1;
-  width: 100%;
   padding: 10px;
   border-radius: 20px;
-  border: 5px solid #08238c;
+  border: 3px solid #08238c;
   font-size: 16px;
 `;
 
 const VoiceButton = styled.button<{ isListening: boolean }>`
-  width: 55px;
-  height: 55px;
+  width: 40px;
+  height: 40px;
   background-color: ${(props) => (props.isListening ? "#ff4444" : "white")};
-  border: 4px solid black;
+  border: 2px solid black;
   border-radius: 50%;
   cursor: pointer;
-  margin-right: 25px;
+  margin-right: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -277,12 +184,6 @@ const MeetingPage = () => {
     );
     ws.onopen = () => {
       console.log("WebSocket connected");
-      ws.send(
-        JSON.stringify({
-          type: "text_query",
-          query: "Hello everyone!",
-        })
-      );
     };
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
@@ -325,61 +226,42 @@ const MeetingPage = () => {
   return (
     <MeetingContainer>
       <TopBar>
-        <SmallLogo /*src={logo}*/ alt="Logo" />
-        <AddButton>
-          {/* <img
-            src={upload}
-            alt="+"
-            style={{ width: "100px", height: "100px" }}
-          /> */}
-        </AddButton>
+        <SmallLogo alt="Logo" />
+        <AddButton>{/* Add button content here if needed */}</AddButton>
       </TopBar>
-      <LeftBar>
-        <MAItWhiteButton>
-          {/* <img
-            src={mAItIconWhite}
-            alt="mAIt"
-            style={{ width: "60px", height: "60px" }}
-          /> */}
-        </MAItWhiteButton>
-        <MenuButton>&#9776;</MenuButton>
-        <BottomButtons>
-          <AudioComponent userId={user.id as number} />
-          <SettingsButton>
-            {/* <Icon src={settings} alt="Settings" /> */}
-          </SettingsButton>
-        </BottomButtons>
-      </LeftBar>
-      <Whiteboard>
-        {screenState.length > 0 && (
-          <MultiScreenChartDisplay screenStates={screenState as any} />
-        )}
-      </Whiteboard>
-      <ChatBoxComponent chatHistory={chatHistory} />
+      <ContentWrapper>
+        <Whiteboard>
+          {screenState.length > 0 && (
+            <MultiScreenChartDisplay screenStates={screenState as any} />
+          )}
+        </Whiteboard>
+        <ChatBoxWrapper>
+          <ChatBoxComponent chatHistory={chatHistory} />
+        </ChatBoxWrapper>
+      </ContentWrapper>
       <BottomBar>
+        <AudioComponent userId={user.id as number} />
+        <CentralizedChatInput>
+          <VoiceButton
+            isListening={isListening}
+            onClick={() => setIsListening(!isListening)}
+          >
+            🎤
+          </VoiceButton>
+          <ChatInput
+            type="text"
+            placeholder="Insert Prompt..."
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
+          />
+        </CentralizedChatInput>
         <CircularIcons>
           {currentMeeting?.participants.map((_, index) => (
             <CircularIcon key={index} />
           ))}
         </CircularIcons>
       </BottomBar>
-      <CentralizedChatInput>
-        <VoiceButton
-          isListening={isListening}
-          onClick={() => setIsListening(!isListening)}
-        >
-          🎤
-          {/* You can replace the microphone emoji with an image if desired */}
-          {/* <img src={voice} alt="Voice" style={{ width: "24px", height: "24px" }} /> */}
-        </VoiceButton>
-        <ChatInput
-          type="text"
-          placeholder="Insert Prompt..."
-          value={chatInput}
-          onChange={(e) => setChatInput(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
-        />
-      </CentralizedChatInput>
     </MeetingContainer>
   );
 };

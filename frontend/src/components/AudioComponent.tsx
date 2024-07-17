@@ -160,8 +160,6 @@ const AudioComponent = ({ userId }: AudioProps) => {
           size="2x"
         />
       </div>
-      <div>Connection status: {isConnected ? "Connected" : "Disconnected"}</div>
-      <div>Mute status: {isMuted ? "Muted" : "Unmuted"}</div>
     </div>
   );
 };
