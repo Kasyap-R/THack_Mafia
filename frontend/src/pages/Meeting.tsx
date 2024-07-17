@@ -20,7 +20,7 @@ const Meeting = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         meeting_name: "Test Meeting",
-        creator_id: "hh",
+        creator_id: "H",
       }),
     });
     const data = await response.json();
@@ -49,6 +49,7 @@ const Meeting = () => {
         if (data.type === "state_update" && data.content) {
           const { username, user_msg } = data.content;
           if (username && user_msg) {
+            console.log(username);
             updateChatHistory({ user: username, message: user_msg });
           }
         }
