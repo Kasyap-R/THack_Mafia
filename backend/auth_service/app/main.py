@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from database.database import get_db
 from database.models import Base, User
-from .models import UserExists, UserCredentials
+from .models import UserExists, UserCredentials, UserModel
 from .services import does_user_exist
 import os
 
@@ -52,6 +52,12 @@ def create_user(creds: UserCredentials, db: Session = Depends(get_db)):
         did_user_exist=False, user_id=new_user.id, username=new_user.username
     )
 
+@router.get("/{id}", response_model=UserModel)
+def get_username_by_id(id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == id).first()
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserModel(user_id=user.id, username=user.username)
 
 # Include the router with the prefix
 app.include_router(router, prefix="/auth")

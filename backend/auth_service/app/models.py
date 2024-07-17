@@ -11,3 +11,10 @@ class UserExists(BaseModel):
     did_user_exist: bool
     user_id: int | None
     username: str | None
+
+class UserModel(BaseModel):
+    user_id: int
+    username: str
+
+    class config:
+        orm_mode = True
