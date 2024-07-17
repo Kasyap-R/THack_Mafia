@@ -9,6 +9,7 @@ from fastapi import (
     UploadFile,
     File,
     WebSocket,
+    WebSocketDisconnect,
 )
 from typing import List
 from fastapi.middleware.cors import CORSMiddleware

@@ -6,6 +6,7 @@ import ChatBoxComponent from "../components/ChatBoxComponent";
 import { Chat, useMeetingStore } from "../stores/MeetingStore";
 import { API_ENDPOINTS } from "../config/api";
 import { Meeting, meetingApi } from "../services/meetingService";
+import MultiScreenChartDisplay from "../components/MultiScreenChartDisplay";
 
 // Import your images here
 //import logo from "../images/mAItLogo.png";
@@ -207,13 +208,21 @@ const VoiceButton = styled.button<{ isListening: boolean }>`
 
 const MeetingPage = () => {
   const { user } = useUserStore();
-  const { currentMeeting, setCurrentMeeting, chatHistory, updateChatHistory } =
-    useMeetingStore((state) => ({
-      chatHistory: state.chatHistory,
-      updateChatHistory: state.updateChatHistory,
-      currentMeeting: state.currentMeeting,
-      setCurrentMeeting: state.setCurrentMeeting,
-    }));
+  const {
+    updateScreenState,
+    currentMeeting,
+    setCurrentMeeting,
+    chatHistory,
+    updateChatHistory,
+    screenState,
+  } = useMeetingStore((state) => ({
+    chatHistory: state.chatHistory,
+    updateChatHistory: state.updateChatHistory,
+    currentMeeting: state.currentMeeting,
+    setCurrentMeeting: state.setCurrentMeeting,
+    updateScreenState: state.updateScreenState,
+    screenState: state.screenState,
+  }));
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [chatInput, setChatInput] = useState("");
   const [isListening, setIsListening] = useState(false);
@@ -277,11 +286,18 @@ const MeetingPage = () => {
     };
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
+      console.log(data);
       if (data.type === "state_update" && data.content) {
-        const { username, user_msg } = data.content;
+        const { screen_image, username, user_msg, llm_answer } = data.content;
         if (username && user_msg) {
           console.log(username);
           updateChatHistory({ user: username, message: user_msg });
+        }
+        if (llm_answer) {
+          updateChatHistory({ user: "mAit", message: llm_answer });
+        }
+        if (screen_image) {
+          updateScreenState(screen_image);
         }
       }
     };
@@ -334,7 +350,11 @@ const MeetingPage = () => {
           </SettingsButton>
         </BottomButtons>
       </LeftBar>
-      <Whiteboard></Whiteboard>
+      <Whiteboard>
+        {screenState.length > 0 && (
+          <MultiScreenChartDisplay screenStates={screenState as any} />
+        )}
+      </Whiteboard>
       <ChatBoxComponent chatHistory={chatHistory} />
       <BottomBar>
         <CircularIcons>

@@ -9,7 +9,7 @@ export interface Chat {
 }
 
 export interface ScreenState {
-    state: string,
+    state: any,
 }
 
 interface MeetingState {
